@@ -1,5 +1,5 @@
 # Heizung
- Heizungssteuerung
+ Heizungssteuerung umgeschrieben auf wiringPi
 
 ## Outputs
 	
