@@ -7,12 +7,14 @@ int setup (void) {
   for (int i = 0; i < 7; i++){
     pinMode (wwallout[i], OUTPUT);
   }
+  return 0;
 }
 
 int init (void) {
   for (int i = 0; i < 7; i++){
     digitalWrite (wwallout[i], HIGH);
   }
+  return 0;
 }
 
 int main (void) {
