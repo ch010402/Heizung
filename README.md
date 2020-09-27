@@ -25,5 +25,5 @@ nr. | shortname | BCM | wPI | O | Bezeichnung | Kommentar
 ## Tasks
 
 - [ ] Setup
-- [ ] ~~Initialisierung~~~
+- [ ] ~~Initialisierung~~
 - [ ] ...
