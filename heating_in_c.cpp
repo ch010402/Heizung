@@ -72,12 +72,9 @@ int main (void) {
   setup();
   
 // test 
-  int wait = 500;
-  for (;;) {
-    digitalWrite (2, HIGH);
-    delay (wait);
-    digitalWrite (2, LOW);
-    delay (wait);
-    }
+  cout << "Start testing..." << endl;
+  set_mischer(3);
+  set_mischer(1);
+  cout << "Done testing..." << endl;
   return 0;
 }
