@@ -12,6 +12,7 @@ int em_pos = 9; // 9 unknown range 0-8
 //----- functions 
 int setup (void) {
   // setup wiringPi -> all needed GPIO pins
+  cout << "Setup start" << endl;
   wiringPiSetup ();
   // set all gpio pins defined in wwallout as OUTPUT
   for (int i = 0; i < 7; i++){
@@ -23,13 +24,14 @@ int setup (void) {
   }
   cout << "Setup done" << endl;
   
-  // init mischer reset to 0 
+  // init mischer reset to 0
+  cout << "Init Mischer start" << endl;
   digitalWrite (6, HIGH);
   digitalWrite (5, LOW);
   delay ((em_catch + em_fullturn)*1000);
   digitalWrite (5, HIGH);
   em_pos = 0;
-  cout << "Init Mischer Done" << endl;
+  cout << "Init Mischer done" << endl;
   
   return 0;
 }
