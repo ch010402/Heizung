@@ -61,7 +61,7 @@ void set_mischer (int new_pos) {
   else {
     // do nothing
     cout << "Mischer at position" << em_pos << endl;
-    return 0; } 
+    return ; } 
 }
 
 //----- main
