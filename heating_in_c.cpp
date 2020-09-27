@@ -48,7 +48,7 @@ void set_mischer (int new_pos) {
     delay (set_pos * step * 1000);
     digitalWrite (6, HIGH);
     em_pos = new_pos;
-    cout << "Set Mischer to position" << em_pos << endl;
+    cout << "Set Mischer to position " << em_pos << endl;
   }
   else if (new_pos < em_pos) {
     // close mischer
@@ -58,11 +58,11 @@ void set_mischer (int new_pos) {
     delay (set_pos * step * 1000);
     digitalWrite (5, HIGH);
     em_pos = new_pos;
-    cout << "Set Mischer to position" << em_pos << endl;
+    cout << "Set Mischer to position " << em_pos << endl;
   }
   else {
     // do nothing
-    cout << "Mischer at position" << em_pos << endl;
+    cout << "Mischer at position " << em_pos << endl;
     return ; } 
 }
 
@@ -75,6 +75,9 @@ int main (void) {
   cout << "Start testing..." << endl;
   set_mischer(3);
   set_mischer(1);
+  set_mischer(1);
+  set_mischer(0);
+  set_mischer(8);
   cout << "Done testing..." << endl;
   return 0;
 }
