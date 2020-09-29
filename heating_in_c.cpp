@@ -13,12 +13,14 @@ int em_pos = 9; // 9 unknown range 0-8
 //----- functions declaration
 int setup(void);
 int set_mischer(int new_pos);
+float get_temp(string address);
 
 
 //----- main
 int main (void) {
   cout << "Starting..." << endl;
   setup();
+  get_temp("28-3c01a81688f4");
   
 // test 
   cout << "Start testing..." << endl;
@@ -88,3 +90,7 @@ int set_mischer (int new_pos) {
   return 0;
 }
 
+float get_temp (string address) {
+  float temp = 123.11;
+  return temp;
+}
