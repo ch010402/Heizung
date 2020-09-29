@@ -62,7 +62,7 @@ void set_mischer (int new_pos) {
   if (em_pos == new_pos) {
     // do nothing
     cout << "Mischer at position " << em_pos << endl;
-    return 0;
+    return;
   }
   // calculate step size
   int step = em_fullturn / 8 ;
@@ -85,6 +85,6 @@ void set_mischer (int new_pos) {
   } 
   em_pos = new_pos;
   cout << "Set Mischer to position " << em_pos << endl;
-  return 0;
+  return;
 }
 
