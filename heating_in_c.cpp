@@ -5,9 +5,8 @@ using namespace std;
 
 //----- initial variables and constantes
 int wwallout[7] = {28, 25, 6, 5, 21, 4, 2}; // all warm water output needed
-int em_catch = 36; // time to catch the elektro mischer (in s)
-//int em_fullturn = 80; // time to rotate the mischer fully (in s)
-int em_fullturn = 8;
+int em_catch = 10; // original 36 time to catch the elektro mischer (in s)
+int em_fullturn = 24; // time to rotate the mischer fully (in s)
 int em_pos = 9; // 9 unknown range 0-8
 // sensor on progpi 28-3c01a81688f4
 
@@ -72,6 +71,7 @@ int set_mischer (int new_pos) {
   int step = em_fullturn / 8 ;
   // calculate step difference 
   int step_diff = em_pos - new_pos ;
+  cout << "moving " << step_diff << " steps." << endl;
   // check if we need to open (+) or close (-) the mischer
   if (step_diff < 0) {
     // open mischer
@@ -88,7 +88,7 @@ int set_mischer (int new_pos) {
     digitalWrite (5, HIGH);
   } 
   em_pos = new_pos;
-  cout << "Set Mischer to position " << em_pos << endl;
+  cout << "Mischer set to position " << em_pos << endl;
   return 0;
 }
 
