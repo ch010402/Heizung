@@ -1,5 +1,6 @@
 #include <wiringPi.h>
 #include <iostream>
+#include <string>
 
 using namespace std;
 
@@ -88,6 +89,14 @@ int set_mischer (int new_pos) {
 float get_temp (string address) {
   string device_file = "/sys/bus/w1/devices/"+ address +"/w1_slave";
   cout << "Sensor file " << device_file << endl;
+  // read sensorfile raw data 
+  // exempel output 
+  // a7 01 55 05 7f a5 a5 66 98 : crc=98 YES
+  // a7 01 55 05 7f a5 a5 66 98 t=26437
+  f = open(device_file, "r")
+  //lines = f.readlines()
+  f.close()
+  
   float temp = 123.11;
   return temp;
 }
