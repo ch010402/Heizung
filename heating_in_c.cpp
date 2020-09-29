@@ -14,24 +14,18 @@ int em_pos = 9; // 9 unknown range 0-8
 int setup(void);
 int set_mischer(int new_pos);
 float get_temp(string address);
+int testscipt(void);
 
 
 //----- main
-int main (void) {
+void main (void) {
   cout << "Starting..." << endl;
   setup();
   float temperatur = get_temp("28-3c01a81688f4");
   
 // test 
-  cout << "Start testing..." << endl;
-  set_mischer(3);
-  set_mischer(1);
-  set_mischer(1);
-  set_mischer(0);
-  set_mischer(8);
-  cout << "temp " << temperatur << endl;
-  cout << "Done testing..." << endl;
-  return 0;
+  testscipt();
+  return;
 }
 
 //----- functions definition
@@ -70,17 +64,17 @@ int set_mischer (int new_pos) {
   // calculate step size
   int step = em_fullturn / 8 ;
   // calculate step difference 
-  int step_diff = em_pos - new_pos ;
+  int step_diff = new_pos - em_pos ;
   cout << "moving " << step_diff << " steps." << endl;
   // check if we need to open (+) or close (-) the mischer
-  if (step_diff < 0) {
+  if (step_diff > 0) {
     // open mischer
     digitalWrite (5, HIGH);
     digitalWrite (6, LOW);
     delay (abs(step_diff) * step * 1000);
     digitalWrite (6, HIGH);
   }
-  else if (step_diff > 0) {
+  else if (step_diff < 0) {
     // close mischer
     digitalWrite (6, HIGH);
     digitalWrite (5, LOW);
@@ -93,6 +87,21 @@ int set_mischer (int new_pos) {
 }
 
 float get_temp (string address) {
+  string device_file = "/sys/bus/w1/devices/"+ address +"/w1_slave";
+  cout << "Sensor file " << device_file << endl;
   float temp = 123.11;
   return temp;
+}
+
+//----- test function
+int testscipt(void) {
+  cout << "Start testing..." << endl;
+  set_mischer(3);
+  set_mischer(1);
+  set_mischer(1);
+  set_mischer(0);
+  set_mischer(8);
+  cout << "temp " << temperatur << endl;
+  cout << "Done testing..." << endl;
+  return 0;
 }
