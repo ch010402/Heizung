@@ -18,14 +18,13 @@ int testscipt(void);
 
 
 //----- main
-void main (void) {
+int main (void) {
   cout << "Starting..." << endl;
   setup();
-  float temperatur = get_temp("28-3c01a81688f4");
   
 // test 
   testscipt();
-  return;
+  return 0;
 }
 
 //----- functions definition
@@ -101,6 +100,7 @@ int testscipt(void) {
   set_mischer(1);
   set_mischer(0);
   set_mischer(8);
+  float temperatur = get_temp("28-3c01a81688f4");
   cout << "temp " << temperatur << endl;
   cout << "Done testing..." << endl;
   return 0;
