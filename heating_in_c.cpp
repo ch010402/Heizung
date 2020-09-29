@@ -20,7 +20,7 @@ float get_temp(string address);
 int main (void) {
   cout << "Starting..." << endl;
   setup();
-  get_temp("28-3c01a81688f4");
+  float temperatur = get_temp("28-3c01a81688f4");
   
 // test 
   cout << "Start testing..." << endl;
@@ -29,6 +29,7 @@ int main (void) {
   set_mischer(1);
   set_mischer(0);
   set_mischer(8);
+  cout << "temp " << temperatur << endl;
   cout << "Done testing..." << endl;
   return 0;
 }
