@@ -11,8 +11,8 @@ int em_pos = 9; // 9 unknown range 0-8
 // sensor on progpi 28-3c01a81688f4
 
 //----- functions declaration
-void setup();
-void set_mischer(int new_pos);
+int setup(void);
+int set_mischer(int new_pos);
 
 
 //----- main
@@ -58,11 +58,11 @@ int setup (void) {
   return 0;
 }
 
-void set_mischer (int new_pos) {
+int set_mischer (int new_pos) {
   if (em_pos == new_pos) {
     // do nothing
     cout << "Mischer at position " << em_pos << endl;
-    return;
+    return 0;
   }
   // calculate step size
   int step = em_fullturn / 8 ;
@@ -85,6 +85,6 @@ void set_mischer (int new_pos) {
   } 
   em_pos = new_pos;
   cout << "Set Mischer to position " << em_pos << endl;
-  return;
+  return 0;
 }
 
