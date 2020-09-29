@@ -10,7 +10,28 @@ int em_fullturn = 80; // time to rotate the mischer fully (in s)
 int em_pos = 9; // 9 unknown range 0-8
 // sensor on progpi 28-3c01a81688f4
 
-//----- functions 
+//----- functions declaration
+void setup();
+void set_mischer(int new_pos);
+
+
+//----- main
+int main (void) {
+  cout << "Starting..." << endl;
+  setup();
+  
+// test 
+  cout << "Start testing..." << endl;
+  set_mischer(3);
+  set_mischer(1);
+  set_mischer(1);
+  set_mischer(0);
+  set_mischer(8);
+  cout << "Done testing..." << endl;
+  return 0;
+}
+
+//----- functions definition
 int setup (void) {
   // setup wiringPi -> all needed GPIO pins
   cout << "Setup start" << endl;
@@ -67,18 +88,3 @@ void set_mischer (int new_pos) {
   return 0;
 }
 
-//----- main
-int main (void) {
-  cout << "Starting..." << endl;
-  setup();
-  
-// test 
-  cout << "Start testing..." << endl;
-  set_mischer(3);
-  set_mischer(1);
-  set_mischer(1);
-  set_mischer(0);
-  set_mischer(8);
-  cout << "Done testing..." << endl;
-  return 0;
-}
