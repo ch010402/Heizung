@@ -74,7 +74,7 @@ int set_mischer (int new_pos) {
     delay (abs(step_diff) * step * 1000);
     digitalWrite (6, HIGH);
   }
-  else if (step_diff < 0) {
+  else {
     // close mischer
     digitalWrite (6, HIGH);
     digitalWrite (5, LOW);
