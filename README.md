@@ -24,6 +24,7 @@ nr. | shortname | BCM | wPI | O | Bezeichnung | Kommentar
 
 ## Tasks
 
-- [ ] Setup
+- [x] Setup output
 - [ ] ~~Initialisierung~~
+- [ ] Read DS18B20 Sensor
 - [ ] ...
