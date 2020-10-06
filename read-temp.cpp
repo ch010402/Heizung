@@ -18,7 +18,7 @@ int main (void) {
   while (getline (file, text)) {
     cout << text << endl;
     if ( text.find("YES") == string::npos) {
-      break;
+      break; // ACHTUNG bricht bei der 2. Lineie ab fixen
     }
 /*    if ( text.find("t=") != string::npos) {
       int pos = text.find("t=");
