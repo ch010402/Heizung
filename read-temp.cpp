@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <cstring>
 
 using namespace std;
 
@@ -11,7 +12,7 @@ string text;
 double temp = -123.45;
 char buffer_in[265];
 
-double get_temp (string dev_address) {
+double get_temp (const char dev_address) {
   //open file and check if openend
   FILE *devFile = fopen(dev_address, "r");
   if (devFile == NULL) {
