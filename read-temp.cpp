@@ -6,8 +6,8 @@
 using namespace std;
 
 char device[16] = "28-3c01a81688f4";
-string basedir = "/sys/bus/w1/devices/";
-string subdir = "/w1_slave";
+char basedir[21] = "/sys/bus/w1/devices/";
+char subdir[10] = "/w1_slave";
 char path[47];
 double temp = -123.45;
 char buffer_in[265];
