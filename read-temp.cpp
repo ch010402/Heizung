@@ -42,7 +42,7 @@ double get_temp (const char* devAddr) {
 int main (void) {
   cout << "Start readning Temp-Sensor ..." << endl;
   
-  temp = get_temp();
+  temp = get_temp(device);
   
   cout << "Temperatur: " << temp << endl;
 
