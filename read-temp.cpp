@@ -12,7 +12,7 @@ string text;
 double temp = -123.45;
 char buffer_in[265];
 
-double get_temp (const char dev_address) {
+double get_temp (const char* dev_address) {
   //open file and check if openend
   FILE *devFile = fopen(dev_address, "r");
   if (devFile == NULL) {
@@ -27,7 +27,7 @@ double get_temp (const char dev_address) {
   //read file
   fscanf(devFile, "%*x %*x %*x %*x %*x %*x %*x %*x %*x : crc=%*x %s", crcConf);
   if (strncmp(crcConf, "YES", 3) == 0) {
-    fscanf(devFile, "%*x %*x %*x %*x %*x %*x %*x %*x %*x t=%5d", tempInt);
+    fscanf(devFile, "%*x %*x %*x %*x %*x %*x %*x %*x %*x t=%5d", &tempInt);
     temperatur = tempInt / 1000.0;
   }
   fclose(devFile);
