@@ -12,12 +12,15 @@ string text;
 double temp = -123.45;
 char buffer_in[265];
 
-double get_temp (const char* dev_address) {
+double get_temp (string devAddr) {
+  //create path
+  device_ = strdup(devAddr);
+  snprintf(path, 46, %s%s%s, basedir, device_, subdir)
   //open file and check if openend
-  FILE *devFile = fopen(dev_address, "r");
+  FILE *devFile = fopen(path, "r");
   if (devFile == NULL) {
     fclose(devFile);
-    cout << "Unable to open file" << dev_address << endl;
+    cout << "Unable to open file" << path << endl;
     return 1;
   }
   //define variable
@@ -38,9 +41,8 @@ double get_temp (const char* dev_address) {
 
 int main (void) {
   cout << "Start readning Temp-Sensor ..." << endl;
-  string address = basedir + device + subdir;
   
-  temp = get_temp(address);
+  temp = get_temp(device);
   
   cout << "Temperatur: " << temp << endl;
 
