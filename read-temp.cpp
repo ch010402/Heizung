@@ -5,17 +5,17 @@
 
 using namespace std;
 
-string device = "28-3c01a81688f4";
+char device[16] = "28-3c01a81688f4";
 string basedir = "/sys/bus/w1/devices/";
 string subdir = "/w1_slave";
 char path[47];
 double temp = -123.45;
 char buffer_in[265];
 
-double get_temp (string devAddr) {
+double get_temp (const char* devAddr) {
   //create path
   char* device_ = strdup(devAddr);
-  snprintf(path, 46, %s%s%s, basedir, device_, subdir)
+  snprintf(path, 46, "%s%s%s", basedir, device_, subdir)
   //open file and check if openend
   FILE *devFile = fopen(path, "r");
   if (devFile == NULL) {
@@ -42,7 +42,7 @@ double get_temp (string devAddr) {
 int main (void) {
   cout << "Start readning Temp-Sensor ..." << endl;
   
-  temp = get_temp(device);
+  temp = get_temp();
   
   cout << "Temperatur: " << temp << endl;
 
