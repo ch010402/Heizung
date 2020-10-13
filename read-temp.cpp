@@ -19,9 +19,20 @@ double get_temp (const char* devAddr) {
   char path[47];
   //char* devAddr_ = strdup(devAddr);
   snprintf(path, 46, "%s%s%s", basedir, devAddr, subdir);
+  ifstream ifile;
+  ifile.open(path);
+  if (ifile) {
+    cout << "exists" << endl;
+    ifile.close();
+  }
+  else {
+    cout << "Oo problem" << endl;
+    ifile.close();
+    return 1;
+  }
   //open file and check if openend
   FILE *devFile = fopen(path, "r");
-  if (devFile == NULL) {
+  if (!devFile) {
     fclose(devFile);
     cout << "Unable to open file" << path << endl;
     return 1;
@@ -43,7 +54,7 @@ double get_temp (const char* devAddr) {
 
 
 int main (void) {
-  cout << "Start readning Temp-Sensor ..." << endl;
+  cout << "Start reading Temp-Sensor ..." << endl;
   
   temp = get_temp(device);
   
