@@ -6,16 +6,19 @@
 using namespace std;
 
 char device[16] = "28-3c01a81688f4";
-char basedir[21] = "/sys/bus/w1/devices/";
-char subdir[10] = "/w1_slave";
-char path[47];
+
+
+
 double temp = -123.45;
 char buffer_in[265];
 
 double get_temp (const char* devAddr) {
   //create path
-  char* device_ = strdup(devAddr);
-  snprintf(path, 46, "%s%s%s", basedir, device_, subdir);
+  char basedir[21] = "/sys/bus/w1/devices/";
+  char subdir[10] = "/w1_slave";
+  char path[47];
+  //char* devAddr_ = strdup(devAddr);
+  snprintf(path, 46, "%s%s%s", basedir, devAddr, subdir);
   //open file and check if openend
   FILE *devFile = fopen(path, "r");
   if (devFile == NULL) {
