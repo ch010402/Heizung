@@ -8,7 +8,7 @@ using namespace std;
 string device = "28-3c01a81688f4";
 string basedir = "/sys/bus/w1/devices/";
 string subdir = "/w1_slave";
-string text;
+char path[47];
 double temp = -123.45;
 char buffer_in[265];
 
