@@ -14,7 +14,7 @@ char buffer_in[265];
 
 double get_temp (string devAddr) {
   //create path
-  device_ = strdup(devAddr);
+  char* device_ = strdup(devAddr);
   snprintf(path, 46, %s%s%s, basedir, device_, subdir)
   //open file and check if openend
   FILE *devFile = fopen(path, "r");
