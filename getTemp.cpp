@@ -55,7 +55,7 @@ double getTemp(string deviceAddress) {
   strTemp = data.substr(TempPos+2);
   cout << "found: " << strTemp << endl;
   temp = stod(strTemp)/1000;
-    
+  cout << "done found temperatur: " << temp <<endl; 
   return temp;
 }
 
