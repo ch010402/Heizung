@@ -63,11 +63,11 @@ double getTemp(string deviceAddress, bool debug = false) {
   return temp;
 }
 
-int main(bool debug = false){
+int main(void){
 
   string testSensor = "28-3c01a81688f4";
   
-  double temperatur = getTemp(testSensor, debug);
+  double temperatur = getTemp(testSensor);
   cout << "es ist " << temperatur << "°C" << endl;
   
   return 0; 
