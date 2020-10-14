@@ -38,11 +38,18 @@ double getTemp(string deviceAddress) {
   cout << data;
   
   cout << "checking CRC ";
-  size_t found = data.find("YES");
-  if (found != string::npos) cout << "ok" << endl;
+  size_t crcCheck = data.find("YES");
+  if (crcCheck != string::npos) cout << "ok" << endl;
   else {
     cout << "fail" << endl;
-    return -1;
+    return -100;
+  }
+  cout << "find temperatur position ";
+  size_t intTempPos = data.find("t=");
+  if (intTempPos != string::npos) cout << intTempPos << endl;
+  else {
+    cout << "failed to find vale -> abort!" << endl;
+    return -101;
   }
   
   
