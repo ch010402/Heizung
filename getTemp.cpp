@@ -21,10 +21,10 @@ double getTemp(string deviceAddress, bool debug = false) {
   string data;
   string strTemp;
   
-  cout << "try to read file " << path << endl;
+  if (debug) cout << "try to read file " << path << endl;
   ifstream infile(path);
   if (infile) {
-    cout << "reading content" << endl;
+    if (debug) cout << "reading content" << endl;
     buffer << infile.rdbuf();
     data = buffer.str();
     infile.close();
@@ -35,27 +35,31 @@ double getTemp(string deviceAddress, bool debug = false) {
     return -1;
   }
   
-  cout << "the content is:" << endl;
-  cout << data;
+  if (debug) cout << "the content is:" << endl;
+  if (debug) cout << data;
   
-  cout << "checking CRC ";
+  if (debug) cout << "checking CRC ";
   size_t crcCheck = data.find("YES");
-  if (crcCheck != string::npos) cout << "ok" << endl;
+  if (crcCheck != string::npos) {
+    if (debug) cout << "ok" << endl;
+  }
   else {
     cout << "fail" << endl;
     return -100;
   }
-  cout << "find temperatur position ";
+  if (debug) cout << "find temperatur position ";
   size_t TempPos = data.find("t=");
-  if (TempPos != string::npos) cout << TempPos << endl;
+  if (TempPos != string::npos) {
+    if (debug) cout << TempPos << endl;
+  }
   else {
     cout << "failed to find vale -> abort!" << endl;
     return -101;
   }
   strTemp = data.substr(TempPos+2);
-  cout << "found: " << strTemp << endl;
+  if (debug) cout << "found: " << strTemp << endl;
   temp = stod(strTemp)/1000;
-  cout << "done found temperatur: " << temp <<endl; 
+  if (debug) cout << "done found temperatur: " << temp <<endl; 
   return temp;
 }
 
