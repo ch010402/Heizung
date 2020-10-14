@@ -18,12 +18,14 @@ double getTemp(string deviceAddress) {
   string tempFile = "/w1_slave";
   string path = baseDir + deviceAddress + tempFile;
   stringstream buffer;
+  string data;
+  
   cout << "try to read file " << path << endl;
   ifstream infile(path);
   if (infile) {
     cout << "reading content" << endl;
-    
     buffer << infile.rdbuf();
+    data = buffer.str();
     infile.close();
   }
   else {
@@ -31,7 +33,7 @@ double getTemp(string deviceAddress) {
     cout << "Error reading file at " << path << endl;
     return -1;
   }
-  cout << buffer.str();
+  cout << data;
   return temp;
 }
 
