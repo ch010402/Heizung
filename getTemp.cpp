@@ -34,7 +34,7 @@ double getTemp(string deviceAddress) {
     return -1;
   }
   
-  size_t found = str.find("YES");
+  size_t found = data.find("YES");
   if (found != string::npos) cout << "ok" << endl;
   
   cout << data;
