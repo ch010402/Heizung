@@ -52,8 +52,8 @@ double getTemp(string deviceAddress) {
     cout << "failed to find vale -> abort!" << endl;
     return -101;
   }
-  strTemp = data.substr(TempPos+1);
-  cout << "found :" << strTemp << endl;
+  strTemp = data.substr(TempPos+2);
+  cout << "found: " << strTemp << endl;
   
   return temp;
 }
