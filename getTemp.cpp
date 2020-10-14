@@ -34,10 +34,18 @@ double getTemp(string deviceAddress) {
     return -1;
   }
   
+  cout << "the content is:" << endl;
+  cout << data;
+  
+  cout << "checking CRC ";
   size_t found = data.find("YES");
   if (found != string::npos) cout << "ok" << endl;
+  else {
+    cout << "fail" << endl;
+    return -1;
+  }
   
-  cout << data;
+  
   return temp;
 }
 
