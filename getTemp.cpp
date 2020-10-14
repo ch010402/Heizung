@@ -19,6 +19,7 @@ double getTemp(string deviceAddress) {
   string path = baseDir + deviceAddress + tempFile;
   stringstream buffer;
   string data;
+  string strTemp;
   
   cout << "try to read file " << path << endl;
   ifstream infile(path);
@@ -45,13 +46,14 @@ double getTemp(string deviceAddress) {
     return -100;
   }
   cout << "find temperatur position ";
-  size_t intTempPos = data.find("t=");
-  if (intTempPos != string::npos) cout << intTempPos << endl;
+  size_t TempPos = data.find("t=");
+  if (TempPos != string::npos) cout << TempPos << endl;
   else {
     cout << "failed to find vale -> abort!" << endl;
     return -101;
   }
-  
+  strTemp = data.substr(TempPos+1);
+  cout << "found :" << strTemp << endl;
   
   return temp;
 }
