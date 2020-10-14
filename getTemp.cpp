@@ -10,7 +10,7 @@ ch010402
 
 using namespace std;
 
-double getTemp(string deviceAddress) {
+double getTemp(string deviceAddress, bool debug = false) {
   
   cout << "start getting temperatur" << endl;
   double temp = 987.65;
