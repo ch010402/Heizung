@@ -33,6 +33,10 @@ double getTemp(string deviceAddress) {
     cout << "Error reading file at " << path << endl;
     return -1;
   }
+  
+  size_t found = str.find("YES");
+  if (found != string::npos) cout << "ok" << endl;
+  
   cout << data;
   return temp;
 }
