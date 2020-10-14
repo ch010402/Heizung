@@ -6,6 +6,7 @@ ch010402
 #include <iostream> // cout
 #include <fstream> //file stream
 #include <string>
+#include <sstream> 
 
 using namespace std;
 
