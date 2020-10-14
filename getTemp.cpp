@@ -12,7 +12,7 @@ using namespace std;
 
 double getTemp(string deviceAddress, bool debug = false) {
   
-  cout << "start getting temperatur" << endl;
+  if (debug) cout << "start getting temperatur" << endl;
   double temp = 987.65;
   string baseDir = "/sys/bus/w1/devices/";
   string tempFile = "/w1_slave";
