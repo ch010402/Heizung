@@ -7,6 +7,8 @@ ch010402
 #include <fstream> //file stream
 #include <string>
 
+using namespace std;
+
 double getTemp(string deviceAddress) {
   
   cout << "start getting temperatur" << endl;
