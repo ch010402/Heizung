@@ -21,7 +21,7 @@ double getTemp(string deviceAddress) {
   ifstream infile(path);
   if (infile) {
     cout << "reading content" << endl;
-    data << infile;
+    infile >> data;
     infile.close();
   }
   else {
