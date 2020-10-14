@@ -16,14 +16,13 @@ double getTemp(string deviceAddress) {
   string baseDir = "/sys/bus/w1/devices/";
   string tempFile = "/w1_slave";
   string path = baseDir + deviceAddress + tempFile;
-  string data;
+  stringstream buffer;
   cout << "try to read file " << path << endl;
   ifstream infile(path);
   if (infile) {
     cout << "reading content" << endl;
-    while (!infile.eof()) {
-      infile >> data;
-    }
+    
+    buffer << infile.rdbuf();
     infile.close();
   }
   else {
@@ -31,7 +30,7 @@ double getTemp(string deviceAddress) {
     cout << "Error reading file at " << path << endl;
     return -1;
   }
-  cout << data;
+  cout << buffer.str();
   return temp;
 }
 
