@@ -22,9 +22,28 @@ nr. | shortname | BCM | wPI | O | Bezeichnung | Kommentar
 15 | er  | 27 |  **2** | 1.2 | Elektrorelais |
 16 | sp	 |    |  **0** | 1.1 | Reserve |
 
+## Inputs
+device address | description
+---|---
+28-0416a10c28ff | Aussen Temperatur
+28-0516a12e05ff | Heizung Vorlauf
+28-0316a162a9ff | Heizung Rücklauf
+28-0516a1529bff | Boiler Vorlauf
+28-0416a10f65ff | Boiler Rücklauf
+28-0416a13049ff | Boiler Temperatur Oben
+28-0416a1295fff | Boiler Temperatur Unten
+28-0516a15419ff | Elektro Vorlauf
+28-0316a15a36ff | Elektro Rücklauf
+28-0416a12058ff | Ofen Vorlauf
+28-0416a10e34ff | Ofen Rücklauf
+28-0316a15f04ff | Speicher Oben
+28-0416a10cc1ff | Speicher Mitte
+28-0416a10de1ff | Speicher Unten
+
 ## Tasks
 
 - [x] Setup output
 - [ ] ~~Initialisierung~~
-- [ ] Read DS18B20 Sensor
+- [x] Read DS18B20 Sensor
+- [ ] Read multiple Sensors and react to them
 - [ ] ...
