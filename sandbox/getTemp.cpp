@@ -1,6 +1,6 @@
 /*
 MIT license 
-ch010402
+ch010402 15.10.2020
 */
 
 #include <iostream> // cout
