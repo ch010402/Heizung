@@ -42,6 +42,7 @@ class pump {
       void initialize() {
         wiringPiSetup();
         pinMode(pin,OUTPUT);
+        cout << "initialized pin: " << pin << endl;
         initialized = true;
       }
 };
@@ -119,7 +120,7 @@ class temperaturSensor {
     string device;
     string baseDir = "/sys/bus/w1/devices/";
     string tempFile = "/w1_slave";
-    string path = baseDir + "28-3c01a81688f4" + tempFile;
+    string path = baseDir + device + tempFile;
     stringstream buffer;
     string data;
     string strTemp;
@@ -137,7 +138,7 @@ int main(void) {
   {
     boilerpumpe.on();
     boilervalve.close();
-    cout << "TestSensor1= " << testSensor1.temperatur() << "°C TestSensor2= " << testSensor2.temperatur() << "°C" << endl;
+    cout << "TestSensor1= " << testSensor1.temperatur() << "°C \nTestSensor2= " << testSensor2.temperatur() << "°C" << endl;
     delay(5*1000);
     boilerpumpe.off();
     boilervalve.open();
