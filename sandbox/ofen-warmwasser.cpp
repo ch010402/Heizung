@@ -89,13 +89,13 @@ class temperaturSensor {
     }
     // methodes
     double temperatur() {
-      cout << "----->>>>" << path << endl;
+      cout << "----->>>>" << address << endl;
       ifstream infile(path);
       if (infile) {
         buffer << infile.rdbuf();
         data = buffer.str();
         infile.close();
-      }  
+      }
       else {
         infile.close();
         cout << "Error reading file at " << path << endl;
@@ -136,7 +136,7 @@ int main(void) {
   {
     boilerpumpe.on();
     boilervalve.close();
-    cout << "TestSensor1= " << testSensor1.address << "°C TestSensor2= " << testSensor2.temperatur() << "°C" << endl;
+    cout << "TestSensor1= " << testSensor1.temperatur() << "°C TestSensor2= " << testSensor2.temperatur() << "°C" << endl;
     delay(5*1000);
     boilerpumpe.off();
     boilervalve.open();
