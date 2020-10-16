@@ -105,10 +105,8 @@ class temperaturSensor {
     string strTemp;
     double temp = 987.6;
   public:
-    // constructor
-    temperaturSensor(string str) {
-       device = str;
-    }
+    // constructor declaration
+    temperaturSensor(string str);
     // methodes
     double temperatur() {
       //cout << "----->>>> " << device << " ----->>>> " << path << endl;
@@ -138,6 +136,11 @@ class temperaturSensor {
       return temp;
     }
 };
+
+// constructor
+    temperaturSensor::temperaturSensor(string str) {
+       device = str;
+    }
 
 int main(void) {
   // test setup
