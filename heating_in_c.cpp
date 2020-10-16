@@ -156,7 +156,7 @@ int testscipt(void) {
   set_mischer(1);
   set_mischer(0);
   set_mischer(8);
-  double temperatur = getTemp(testSensor);
+  temperatur = getTemp(testSensor);
   cout << "es ist " << temperatur << "°C" << endl;
   cout << "Done testing..." << endl;
   return 0;
