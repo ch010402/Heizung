@@ -16,13 +16,16 @@ int wwallout[7] = {28, 25, 6, 5, 21, 4, 2}; // all warm water output needed
 int em_catch = 10; // original 36 time to catch the elektro mischer (in s)
 int em_fullturn = 24; // time to rotate the mischer fully (in s)
 int em_pos = 9; // 9 unknown range 0-8
-string testSensor = "28-3c01a81688f4"; // sensor on progpi 28-3c01a81688f4
+string testSensor1 = "28-3c01a81688f4"; // sensor on progpi 28-3c01a81688f4
+string testSensor2 = "28-3c01a816d9c1"; // sensor on progpi 28-3c01a816d9c1
 string ofenrueck = "28-0416a10e34ff" // Ofenrücklauf Sensor
+int wwvalve = 28;
+int wwpump = 21;
 
 //----- functions declaration
 int setup(void);
 int set_mischer(int new_pos);
-float get_temp(string address);
+double getTemp(string address, bool debug = false);
 int testscipt(void);
 
 
@@ -31,8 +34,28 @@ int main (void) {
   cout << "Starting..." << endl;
   setup();
   
+  double orl, bu;
+  orl = getTemp(testSensor1);
+  bu = getTemp(testSensor2);
+  
+  while {
+    if (orl > bu) {
+      digitalWrite (wwvalve, LOW);
+      digitalWrite (wwpump, LOW);
+      
+      if (orl < bu) {
+        digitalWrite (wwpump, HIGH);
+        digitalWrite (wwvalve, HIGH)
+      }
+      else delay (30 * 1000);
+      delay (20 * 1000); // 300 defaul
+    }
+    else delay (10 * 1000);
+  
+    
 // test 
-  testscipt();
+//  testscipt();
+  cout << "Done." << endl;
   return 0;
 }
 
