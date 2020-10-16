@@ -83,17 +83,17 @@ class valve {
 
 class temperaturSensor {
   public:
-    string address = "abc";
+    string device = "abc";
     // constructor
     temperaturSensor(string str) {
-      temperaturSensor::address = str;
+      device = str;
     }
     string baseDir = "/sys/bus/w1/devices/";
     string tempFile = "/w1_slave";
-    string path = baseDir + tempFile + address;
+    string path = baseDir + device + tempFile;
     // methodes
     double temperatur() {
-      cout << "----->>>> " << address << "----->>>> " << path << endl;
+      cout << "----->>>> " << device << "----->>>> " << path << endl;
       ifstream infile(path);
       if (infile) {
         buffer << infile.rdbuf();
