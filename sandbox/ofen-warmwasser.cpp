@@ -99,7 +99,7 @@ class temperaturSensor {
     string device;
     string baseDir = "/sys/bus/w1/devices/";
     string tempFile = "/w1_slave";
-    string path = baseDir + device + tempFile;
+    string path;
     stringstream buffer;
     string data;
     string strTemp;
@@ -128,7 +128,7 @@ class temperaturSensor {
       }
       size_t TempPos = data.find("t=");
       if (TempPos == string::npos) {
-        cout << "failed to find vale -> abort!" << endl;
+        cout << "failed to find value -> abort!" << endl;
         return -102;
       }
       strTemp = data.substr(TempPos+2);
@@ -140,6 +140,7 @@ class temperaturSensor {
 // constructor
     temperaturSensor::temperaturSensor(string str) {
        device = str;
+       path = baseDir + device + tempFile;
     }
 
 int main(void) {
