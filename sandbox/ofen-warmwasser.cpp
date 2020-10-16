@@ -25,7 +25,7 @@ class pump {
       if (!initialized) initialize();
       if (newStatus == oldStatus) return;
       digitalWrite(pin, LOW);
-      cout << this <<" Pumpe eingeschaltet" << endl;
+      cout <<" Pumpe eingeschaltet" << endl;
       oldStatus = newStatus;
     }
     void off() {
@@ -80,14 +80,62 @@ class valve {
       }
 };
 
+class temeraturSensor {
+  public:
+    // constructor
+    temeraturSensor(string addr) {
+      address = addr;
+    }
+    // methodes
+    double temperatur() {
+      ifstream infile(path);
+      if (infile) {
+        buffer << infile.rdbuf();
+        data = buffer.str();
+        infile.close();
+      }  
+      else {
+        infile.close();
+        cout << "Error reading file at " << path << endl;
+        return -100;
+      }
+      size_t crcCheck = data.find("YES");
+      if (crcCheck == string::npos) {
+        cout << "CRC fail not reading temperatur" << endl;
+        return -101;
+      }
+      size_t TempPos = data.find("t=");
+      if (TempPos != string::npos) {
+        cout << "failed to find vale -> abort!" << endl;
+        return -102;
+      }
+      strTemp = data.substr(TempPos+2);
+      temp = stod(strTemp)/1000;
+      return temp;
+    }
+  private:
+    string address;
+    string baseDir = "/sys/bus/w1/devices/";
+    string tempFile = "/w1_slave";
+    string path = baseDir + address + tempFile;
+    stringstream buffer;
+    string data;
+    string strTemp;
+    double temp = 987.6;
+    // methodes
+};
+
 int main(void) {
   // test setup
   pump boilerpumpe(21);
   valve boilervalve(28);
+  temeraturSensor testSensor1("28-3c01a81688f4");
+  temeraturSensor testSensor2("28-3c01a816d9c1");
   while (true)
   {
     boilerpumpe.on();
     boilervalve.close();
+    cout << "TestSensor1= " << testSensor1.temperatur() << "°C TestSensor2= " << testSensor2.temperatur() << "°C" << endl;
     delay(5*1000);
     boilerpumpe.off();
     boilervalve.open();
