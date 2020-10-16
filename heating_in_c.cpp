@@ -38,7 +38,7 @@ int main (void) {
   orl = getTemp(testSensor1);
   bu = getTemp(testSensor2);
   
-  while {
+  while () {
     if (orl > bu) {
       digitalWrite (wwvalve, LOW);
       digitalWrite (wwpump, LOW);
