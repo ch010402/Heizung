@@ -25,7 +25,7 @@ int wwpump = 21;
 //----- functions declaration
 int setup(void);
 int set_mischer(int new_pos);
-double getTemp(string address, bool debug = false);
+double getTemp(string address, bool debug);
 int testscipt(void);
 
 
@@ -174,14 +174,14 @@ double getTemp(string deviceAddress, bool debug = false) {
 //----- test function
 int testscipt(void) {
   cout << "Start testing..." << endl;
-  double temperatur = getTemp(testSensor, TRUE);
+  double temperatur = getTemp(testSensor1, TRUE);
   cout << "es ist " << temperatur << "°C" << endl;
   set_mischer(3);
   set_mischer(1);
   set_mischer(1);
   set_mischer(0);
   set_mischer(8);
-  temperatur = getTemp(testSensor);
+  temperatur = getTemp(testSensor1);
   cout << "es ist " << temperatur << "°C" << endl;
   cout << "Done testing..." << endl;
   return 0;
