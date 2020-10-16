@@ -119,7 +119,7 @@ class temperaturSensor {
     string device;
     string baseDir = "/sys/bus/w1/devices/";
     string tempFile = "/w1_slave";
-    string path = baseDir + device + tempFile;
+    string path = baseDir + "28-3c01a81688f4" + tempFile;
     stringstream buffer;
     string data;
     string strTemp;
