@@ -13,8 +13,8 @@ using namespace std;
 
 //----- initial variables and constantes
 int wwallout[7] = {28, 25, 6, 5, 21, 4, 2}; // all warm water output needed
-int em_catch = 10; // original 36 time to catch the elektro mischer (in s)
-int em_fullturn = 24; // time to rotate the mischer fully (in s)
+int em_catch = 5; // original 36 time to catch the elektro mischer (in s)
+int em_fullturn = 5; // original 80 time to rotate the mischer fully (in s)
 int em_pos = 9; // 9 unknown range 0-8
 string testSensor1 = "28-3c01a81688f4"; // sensor on progpi 28-3c01a81688f4
 string testSensor2 = "28-3c01a816d9c1"; // sensor on progpi 28-3c01a816d9c1
@@ -44,15 +44,13 @@ int main (void) {
       digitalWrite (wwvalve, LOW);
       digitalWrite (wwpump, LOW);
       cout << "schalte ein" << endl;
-      if (orl < bu) {
-        digitalWrite (wwpump, HIGH);
-        digitalWrite (wwvalve, HIGH);
-        cout << "schalte aus" << endl;
       }
-      else delay (3 * 1000); // 30 defaul
-      delay (20 * 1000); // 300 defaul
+    else {
+      digitalWrite (wwpump, HIGH);
+      digitalWrite (wwvalve, HIGH);
+      cout << "schalte aus" << endl;
     }
-    else delay (10 * 1000);
+    delay (10 * 1000); // 300 defaul
   }
   
     
