@@ -23,15 +23,21 @@ class pump {
     void on() {
       bool newStatus = true;
       if (!initialized) initialize();
-      if (newStatus == oldStatus) return;
+      if (newStatus == oldStatus) {
+        cout << "Pumpe bereits eingeschaltet" << endl;
+        return;
+      }
       digitalWrite(pin, LOW);
-      cout <<"Pumpe eingeschaltet" << endl;
+      cout << "Pumpe eingeschaltet" << endl;
       oldStatus = newStatus;
     }
     void off() {
       bool newStatus = false;
       if (!initialized) initialize();
-      if (newStatus == oldStatus) return;
+      if (newStatus == oldStatus) {
+        cout << "Pumpe bereits ausgeschaltet" << endl;
+        return;
+      }
       digitalWrite(pin, HIGH);
       cout << "Pumpe ausgeschaltet" << endl;
       oldStatus = newStatus;
@@ -58,7 +64,10 @@ class valve {
     void open() {
       bool newStatus = true;
       if (!initialized) initialize();
-      if (newStatus == oldStatus) return;
+      if (newStatus == oldStatus) {
+        cout << "Ventil bereits geöffnet" << endl;
+        return;
+      }
       digitalWrite(pin, LOW);
       cout << "Ventil geöffnet" << endl;
       oldStatus = newStatus;
@@ -66,7 +75,10 @@ class valve {
     void close() {
       bool newStatus = false;
       if (!initialized) initialize();
-      if (newStatus == oldStatus) return;
+      if (newStatus == oldStatus) {
+        cout << "Ventil bereits geschlossen" << endl;
+        return;
+      }
       digitalWrite(pin, HIGH);
       cout << "Ventil geschlossen" << endl;
       oldStatus = newStatus;
