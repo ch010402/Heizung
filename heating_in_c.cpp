@@ -35,13 +35,11 @@ int main (void) {
   setup();
   
   double orl, bu;
-
-
-  cout << "Ofenrücklauf= " << orl << " Boiler unten= " << bu << endl;
   
   while (TRUE) {
     orl = getTemp(testSensor1);
     bu = getTemp(testSensor2);
+    cout << "Ofenrücklauf= " << orl << " Boiler unten= " << bu << endl;
     if (orl > bu) {
       digitalWrite (wwvalve, LOW);
       digitalWrite (wwpump, LOW);
