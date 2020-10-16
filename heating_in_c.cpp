@@ -37,17 +37,20 @@ int main (void) {
   double orl, bu;
   orl = getTemp(testSensor1);
   bu = getTemp(testSensor2);
+
+  cout << "Ofenrücklauf= " << orl << " Boiler unten= " << bu << endl;
   
   while (TRUE) {
     if (orl > bu) {
       digitalWrite (wwvalve, LOW);
       digitalWrite (wwpump, LOW);
-      
+      cout << "schalte ein" << endl;
       if (orl < bu) {
         digitalWrite (wwpump, HIGH);
         digitalWrite (wwvalve, HIGH);
+        cout "schalte aus" << endl;
       }
-      else delay (30 * 1000);
+      else delay (3 * 1000); // 30 defaul
       delay (20 * 1000); // 300 defaul
     }
     else delay (10 * 1000);
