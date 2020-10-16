@@ -96,9 +96,7 @@ class valve {
 
 class temperaturSensor {
   private:
-    string device;
-    string baseDir = "/sys/bus/w1/devices/";
-    string tempFile = "/w1_slave";
+    // string device;
     string path;
     stringstream buffer;
     string data;
@@ -138,10 +136,12 @@ class temperaturSensor {
 };
 
 // constructor
-    temperaturSensor::temperaturSensor(string str) {
-       device = str;
-       path = baseDir + device + tempFile;
-    }
+temperaturSensor::temperaturSensor(string str) {
+  string device = str;
+  const static string baseDir = "/sys/bus/w1/devices/";
+  const static string tempFile = "/w1_slave";
+  path = baseDir + device + tempFile;
+}
 
 int main(void) {
   // test setup
