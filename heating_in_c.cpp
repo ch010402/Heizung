@@ -1,6 +1,13 @@
+/*
+MIT license 
+ch010402 16.10.2020
+*/
+
 #include <wiringPi.h>
-#include <iostream>
-#include <string>
+#include <iostream> // cout
+#include <fstream> // file stream access
+#include <string> // string class
+#include <sstream> // string stream needed for file access to put data into string
 
 using namespace std;
 
@@ -9,7 +16,7 @@ int wwallout[7] = {28, 25, 6, 5, 21, 4, 2}; // all warm water output needed
 int em_catch = 10; // original 36 time to catch the elektro mischer (in s)
 int em_fullturn = 24; // time to rotate the mischer fully (in s)
 int em_pos = 9; // 9 unknown range 0-8
-// sensor on progpi 28-3c01a81688f4
+string testSensor = "28-3c01a81688f4"; // sensor on progpi 28-3c01a81688f4
 
 //----- functions declaration
 int setup(void);
@@ -86,31 +93,71 @@ int set_mischer (int new_pos) {
   return 0;
 }
 
-float get_temp (string address) {
-  string device_file = "/sys/bus/w1/devices/"+ address +"/w1_slave";
-  cout << "Sensor file " << device_file << endl;
-  // read sensorfile raw data 
-  // exempel output 
-  // a7 01 55 05 7f a5 a5 66 98 : crc=98 YES
-  // a7 01 55 05 7f a5 a5 66 98 t=26437
-  f = open(device_file, "r")
-  //lines = f.readlines()
-  f.close()
+double getTemp(string deviceAddress, bool debug = false) {
   
-  float temp = 123.11;
+  if (debug) cout << "start getting temperatur" << endl;
+  double temp = 987.65;
+  string baseDir = "/sys/bus/w1/devices/";
+  string tempFile = "/w1_slave";
+  string path = baseDir + deviceAddress + tempFile;
+  stringstream buffer;
+  string data;
+  string strTemp;
+  
+  if (debug) cout << "try to read file " << path << endl;
+  ifstream infile(path);
+  if (infile) {
+    if (debug) cout << "reading content" << endl;
+    buffer << infile.rdbuf();
+    data = buffer.str();
+    infile.close();
+  }
+  else {
+    infile.close();
+    cout << "Error reading file at " << path << endl;
+    return -1;
+  }
+  
+  if (debug) cout << "the content is:" << endl;
+  if (debug) cout << data;
+  
+  if (debug) cout << "checking CRC ";
+  size_t crcCheck = data.find("YES");
+  if (crcCheck != string::npos) {
+    if (debug) cout << "ok" << endl;
+  }
+  else {
+    cout << "fail" << endl;
+    return -100;
+  }
+  if (debug) cout << "find temperatur position ";
+  size_t TempPos = data.find("t=");
+  if (TempPos != string::npos) {
+    if (debug) cout << TempPos << endl;
+  }
+  else {
+    cout << "failed to find vale -> abort!" << endl;
+    return -101;
+  }
+  strTemp = data.substr(TempPos+2);
+  if (debug) cout << "found: " << strTemp << endl;
+  temp = stod(strTemp)/1000;
+  if (debug) cout << "done found temperatur: " << temp <<endl; 
   return temp;
 }
 
 //----- test function
 int testscipt(void) {
   cout << "Start testing..." << endl;
+  double temperatur = getTemp(testSensor);
+  cout << "es ist " << temperatur << "°C" << endl;
   set_mischer(3);
   set_mischer(1);
   set_mischer(1);
   set_mischer(0);
   set_mischer(8);
-  float temperatur = get_temp("28-3c01a81688f4");
-  cout << "temp " << temperatur << endl;
+  double temperatur = getTemp(testSensor);
+  cout << "es ist " << temperatur << "°C" << endl;
   cout << "Done testing..." << endl;
   return 0;
 }
