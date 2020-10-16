@@ -82,6 +82,7 @@ class valve {
 
 class temperaturSensor {
   public:
+    string address;
     // constructor
     temperaturSensor(string str) {
       address = str;
@@ -116,7 +117,6 @@ class temperaturSensor {
     }
   private:
     string baseDir = "/sys/bus/w1/devices/";
-    string address;
     string tempFile = "/w1_slave";
     string path = baseDir + address + tempFile;
     stringstream buffer;
@@ -136,7 +136,7 @@ int main(void) {
   {
     boilerpumpe.on();
     boilervalve.close();
-    cout << "TestSensor1= " << testSensor1.temperatur() << "°C TestSensor2= " << testSensor2.temperatur() << "°C" << endl;
+    cout << "TestSensor1= " << testSensor1.address << "°C TestSensor2= " << testSensor2.temperatur() << "°C" << endl;
     delay(5*1000);
     boilerpumpe.off();
     boilervalve.open();
