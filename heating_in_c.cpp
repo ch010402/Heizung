@@ -1,6 +1,6 @@
 /*
 MIT license 
-ch010402 16.10.2020 14:56
+ch010402 16.10.2020 15:00
 */
 
 #include <wiringPi.h>
