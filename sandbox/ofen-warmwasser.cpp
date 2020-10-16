@@ -86,7 +86,7 @@ class temperaturSensor {
     string address = "abc";
     // constructor
     temperaturSensor(string str) {
-      temperaturSensor:address = str;
+      temperaturSensor::address = str;
     }
     string baseDir = "/sys/bus/w1/devices/";
     string tempFile = "/w1_slave";
