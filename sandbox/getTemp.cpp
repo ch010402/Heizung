@@ -4,9 +4,9 @@ ch010402 15.10.2020
 */
 
 #include <iostream> // cout
-#include <fstream> //file stream
-#include <string>
-#include <sstream> 
+#include <fstream> // file stream access
+#include <string> // string class
+#include <sstream> // string stream needed for file access to put data into string
 
 using namespace std;
 
