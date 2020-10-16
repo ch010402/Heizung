@@ -51,6 +51,7 @@ int main (void) {
       delay (20 * 1000); // 300 defaul
     }
     else delay (10 * 1000);
+  }
   
     
 // test 
