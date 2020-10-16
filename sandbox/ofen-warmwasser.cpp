@@ -83,6 +83,7 @@ class valve {
 class temperaturSensor {
   public:
     string address;
+    string path = baseDir + address + tempFile;
     // constructor
     temperaturSensor(string str) {
       address = str;
@@ -118,7 +119,6 @@ class temperaturSensor {
   private:
     string baseDir = "/sys/bus/w1/devices/";
     string tempFile = "/w1_slave";
-    string path = baseDir + address + tempFile;
     stringstream buffer;
     string data;
     string strTemp;
