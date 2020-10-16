@@ -98,7 +98,7 @@ class temperaturSensor {
   public:
     // constructor
     temperaturSensor(string str) {
-      device.assign(str);
+      device = str;
     }
     // methodes
     double temperatur() {
@@ -144,7 +144,8 @@ int main(void) {
   // test setup
   pump boilerpumpe(21);
   valve boilervalve(28);
-  temperaturSensor testSensor1("28-3c01a81688f4");
+  string tSensor1 = "28-3c01a81688f4";
+  temperaturSensor testSensor1(tSensor1);
   temperaturSensor testSensor2("28-3c01a816d9c1");
   while (true)
   {
