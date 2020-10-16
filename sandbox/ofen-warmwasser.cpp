@@ -78,7 +78,7 @@ class valve {
         pinMode(pin,OUTPUT);
         initialized = true;
       }
-}
+};
 
 int main(void) {
   // test setup
