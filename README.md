@@ -39,6 +39,7 @@ device address | description
 28-0316a15f04ff | Speicher Oben
 28-0416a10cc1ff | Speicher Mitte
 28-0416a10de1ff | Speicher Unten
+28-3c01a81688f4 | TestSensor @ progpi
 
 ## Tasks
 
