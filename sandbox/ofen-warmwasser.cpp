@@ -90,7 +90,7 @@ class temperaturSensor {
     }
     string baseDir = "/sys/bus/w1/devices/";
     string tempFile = "/w1_slave";
-    string path = baseDir + address + tempFile;
+    string path = baseDir + tempFile + address;
     // methodes
     double temperatur() {
       cout << "----->>>> " << address << "----->>>> " << path << endl;
