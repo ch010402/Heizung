@@ -132,12 +132,11 @@ class temperaturSensor {
     string device;
     string baseDir = "/sys/bus/w1/devices/";
     string tempFile = "/w1_slave";
-    string path = baseDir + device + tempFile;
+    string path = baseDir.append(device);// + tempFile;
     stringstream buffer;
     string data;
     string strTemp;
     double temp = 987.6;
-    // methodes
 };
 
 int main(void) {
