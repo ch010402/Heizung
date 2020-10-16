@@ -25,7 +25,7 @@ class pump {
       if (!initialized) initialize();
       if (newStatus == oldStatus) return;
       digitalWrite(pin, LOW);
-      cout <<" Pumpe eingeschaltet" << endl;
+      cout <<"Pumpe eingeschaltet" << endl;
       oldStatus = newStatus;
     }
     void off() {
@@ -80,15 +80,15 @@ class valve {
       }
 };
 
-class temeraturSensor {
+class temperaturSensor {
   public:
-    string address;
     // constructor
-    temeraturSensor(string addr) {
-      address = addr;
+    temperaturSensor(string str) {
+      address = str;
     }
     // methodes
     double temperatur() {
+      cout << "----->>>>" << path << endl;
       ifstream infile(path);
       if (infile) {
         buffer << infile.rdbuf();
@@ -116,6 +116,7 @@ class temeraturSensor {
     }
   private:
     string baseDir = "/sys/bus/w1/devices/";
+    string address;
     string tempFile = "/w1_slave";
     string path = baseDir + address + tempFile;
     stringstream buffer;
@@ -129,8 +130,8 @@ int main(void) {
   // test setup
   pump boilerpumpe(21);
   valve boilervalve(28);
-  temeraturSensor testSensor1("28-3c01a81688f4");
-  temeraturSensor testSensor2("28-3c01a816d9c1");
+  temperaturSensor testSensor1("28-3c01a81688f4");
+  temperaturSensor testSensor2("28-3c01a816d9c1");
   while (true)
   {
     boilerpumpe.on();
