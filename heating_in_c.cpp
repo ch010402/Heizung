@@ -48,7 +48,7 @@ int main (void) {
       if (orl < bu) {
         digitalWrite (wwpump, HIGH);
         digitalWrite (wwvalve, HIGH);
-        cout "schalte aus" << endl;
+        cout << "schalte aus" << endl;
       }
       else delay (3 * 1000); // 30 defaul
       delay (20 * 1000); // 300 defaul
