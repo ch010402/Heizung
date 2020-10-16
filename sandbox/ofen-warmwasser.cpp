@@ -83,7 +83,7 @@ class valve {
 
 class temperaturSensor {
   public:
-    string address;
+    string address = "abc";
     // constructor
     temperaturSensor(string str) {
       address = str;
