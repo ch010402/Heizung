@@ -83,26 +83,35 @@ class valve {
       cout << "Ventil geschlossen" << endl;
       oldStatus = newStatus;
     }
-    private:
-      bool initialized = false; // default false 
-      bool oldStatus = false; // false = off true = on; default false as initialized
-      void initialize() {
-        wiringPiSetup();
-        pinMode(pin,OUTPUT);
-        cout << "initialized pin: " << pin << endl;
-        initialized = true;
-      }
+  private:
+    bool initialized = false; // default false 
+    bool oldStatus = false; // false = off true = on; default false as initialized
+    void initialize() {
+      wiringPiSetup();
+      pinMode(pin,OUTPUT);
+      cout << "initialized pin: " << pin << endl;
+      initialized = true;
+    }
 };
 
 class temperaturSensor {
+  private:
+    string device;
+    string baseDir = "/sys/bus/w1/devices/";
+    string tempFile = "/w1_slave";
+    string path = baseDir + device + tempFile;
+    stringstream buffer;
+    string data;
+    string strTemp;
+    double temp = 987.6;
   public:
     // constructor
     temperaturSensor(string str) {
-      device = str;
+       device = str;
     }
     // methodes
     double temperatur() {
-      cout << "----->>>> " << device << " ----->>>> " << path << endl;
+      //cout << "----->>>> " << device << " ----->>>> " << path << endl;
       ifstream infile(path);
       if (infile) {
         buffer << infile.rdbuf();
@@ -128,15 +137,6 @@ class temperaturSensor {
       temp = stod(strTemp)/1000;
       return temp;
     }
-  private:
-    string device;
-    string baseDir = "/sys/bus/w1/devices/";
-    string tempFile = "/w1_slave";
-    string path = baseDir.append(device);// + tempFile;
-    stringstream buffer;
-    string data;
-    string strTemp;
-    double temp = 987.6;
 };
 
 int main(void) {
