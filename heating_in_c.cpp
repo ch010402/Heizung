@@ -17,7 +17,7 @@ int em_catch = 10; // original 36 time to catch the elektro mischer (in s)
 int em_fullturn = 24; // time to rotate the mischer fully (in s)
 int em_pos = 9; // 9 unknown range 0-8
 string testSensor = "28-3c01a81688f4"; // sensor on progpi 28-3c01a81688f4
-string ofenrueck = "28-0416a10e34ff" // Ofenrücklauf Sensor
+string ofenrueck = "28-0416a10e34ff"; // Ofenrücklauf Sensor
 
 //----- functions declaration
 int setup(void);
