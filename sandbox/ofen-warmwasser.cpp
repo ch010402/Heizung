@@ -101,7 +101,7 @@ class temperaturSensor {
     stringstream buffer;
     string data;
     string strTemp;
-    double temp = 987.6;
+    //double temp;
   public:
     // constructor declaration
     temperaturSensor(string str);
@@ -130,7 +130,7 @@ class temperaturSensor {
         return -102;
       }
       strTemp = data.substr(TempPos+2);
-      temp = stod(strTemp)/1000;
+      double temp = stod(strTemp)/1000;
       return temp;
     }
 };
