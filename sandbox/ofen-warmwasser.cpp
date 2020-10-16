@@ -31,7 +31,7 @@ class pump {
     void off() {
       bool newStatus = false;
       if (!initialized) initialize();
-      if (newStatus = oldStatus) return;
+      if (newStatus == oldStatus) return;
       digitalWrite(pin, HIGH);
       cout << "Pumpe ausgeschaltet" << endl;
       oldStatus = newStatus;
