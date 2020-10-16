@@ -82,6 +82,7 @@ class valve {
 
 class temeraturSensor {
   public:
+    string address;
     // constructor
     temeraturSensor(string addr) {
       address = addr;
@@ -114,7 +115,6 @@ class temeraturSensor {
       return temp;
     }
   private:
-    string address;
     string baseDir = "/sys/bus/w1/devices/";
     string tempFile = "/w1_slave";
     string path = baseDir + address + tempFile;
