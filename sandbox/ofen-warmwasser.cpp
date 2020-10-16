@@ -107,7 +107,7 @@ class temperaturSensor {
         return -101;
       }
       size_t TempPos = data.find("t=");
-      if (TempPos != string::npos) {
+      if (TempPos == string::npos) {
         cout << "failed to find vale -> abort!" << endl;
         return -102;
       }
