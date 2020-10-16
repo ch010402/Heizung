@@ -98,7 +98,7 @@ class temperaturSensor {
   public:
     // constructor
     temperaturSensor(string str) {
-      device = str;
+      device.assign(str);
     }
     // methodes
     double temperatur() {
