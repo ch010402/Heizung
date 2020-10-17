@@ -163,7 +163,7 @@ int main(void) {
     // test system
     orl = testSensor1.temperatur();
     bu = testSensor2.temperatur();
-    if ( orl + 5 > bu) {
+    if ( orl - 5 > bu) {
       cout <<"Ofen Rücklauf " << orl << "°C Boiler unten " << bu << "°C" << endl;
       boilervalve.open();
       boilerpumpe.on();
