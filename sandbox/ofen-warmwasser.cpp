@@ -50,6 +50,7 @@ class pump {
       void initialize() {
         wiringPiSetup();
         pinMode(pin,OUTPUT);
+        digitalWrite(pin, HIGH);
         cout << "initialized pin: " << pin << endl;
         initialized = true;
       }
@@ -93,6 +94,7 @@ class valve {
     void initialize() {
       wiringPiSetup();
       pinMode(pin,OUTPUT);
+      digitalWrite(pin, HIGH);
       cout << "initialized pin: " << pin << endl;
       initialized = true;
     }
@@ -154,15 +156,15 @@ int main(void) {
   double orl;
   double bu;
   while (true)
-  {
-    /* 
+  { 
     // production system
     orl = ofenRuecklauf.temperatur();
     bu = boilerUnten.temperatur();
-    */
+    /*
     // test system
     orl = testSensor1.temperatur();
     bu = testSensor2.temperatur();
+    */
     if ( orl - 5 > bu) {
       cout <<"Ofen Rücklauf " << orl << "°C Boiler unten " << bu << "°C" << endl;
       boilervalve.open();
