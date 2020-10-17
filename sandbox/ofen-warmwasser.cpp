@@ -147,17 +147,19 @@ int main(void) {
   // test setup
   pump boilerpumpe(21);
   valve boilervalve(28);
-  string tSensor1 = "28-3c01a81688f4";
-  temperaturSensor testSensor1(tSensor1);
+  temperaturSensor testSensor1("28-3c01a81688f4");
   temperaturSensor testSensor2("28-3c01a816d9c1");
-  while (true)
+  int i = 0;
+  while (i < 100)
   {
     boilerpumpe.on();
     boilervalve.close();
     cout << "TestSensor1= " << testSensor1.temperatur() << "°C \nTestSensor2= " << testSensor2.temperatur() << "°C" << endl;
-    delay(5*1000);
+    delay(1*1000);
     boilerpumpe.off();
     boilervalve.open();
-    delay(5*1000);
+    delay(1*1000);
+    cout << i << endl;
+    i++;
   }
 }
