@@ -98,9 +98,9 @@ class temperaturSensor {
   private:
     // string device;
     string path;
-    stringstream buffer;
-    string data;
-    string strTemp;
+    //stringstream buffer;
+    //string data;
+    //string strTemp;
     //double temp;
   public:
     // constructor declaration
@@ -108,11 +108,13 @@ class temperaturSensor {
     // methodes
     double temperatur() {
       //cout << "----->>>> " << device << " ----->>>> " << path << endl;
+      string data;
       ifstream infile(path);
       if (infile) {
+        stringstream buffer;
         buffer << infile.rdbuf();
-        data = buffer.str();
         infile.close();
+        data = buffer.str();
       }
       else {
         infile.close();
@@ -129,7 +131,8 @@ class temperaturSensor {
         cout << "failed to find value -> abort!" << endl;
         return -102;
       }
-      strTemp = data.substr(TempPos+2);
+      string strTemp = data.substr(TempPos+2);
+      //cout << strTemp;
       double temp = stod(strTemp)/1000;
       return temp;
     }
@@ -150,7 +153,7 @@ int main(void) {
   temperaturSensor testSensor1("28-3c01a81688f4");
   temperaturSensor testSensor2("28-3c01a816d9c1");
   int i = 0;
-  while (i < 100)
+  while (i < 10)
   {
     boilerpumpe.on();
     boilervalve.close();
