@@ -71,6 +71,7 @@ class valve {
         return;
       }
       digitalWrite(pin, LOW);
+      delay(10*1000);
       cout << "Ventil geöffnet" << endl;
       oldStatus = newStatus;
     }
@@ -82,6 +83,7 @@ class valve {
         return;
       }
       digitalWrite(pin, HIGH);
+      delay(10*1000);
       cout << "Ventil geschlossen" << endl;
       oldStatus = newStatus;
     }
@@ -147,14 +149,32 @@ int main(void) {
   valve boilervalve(28);
   temperaturSensor testSensor1("28-3c01a81688f4");
   temperaturSensor testSensor2("28-3c01a816d9c1");
+  temperaturSensor ofenRuecklauf("28-0416a10e34ff");
+  temperaturSensor boilerUnten("28-0416a1295fff");
+  double orl;
+  double bu;
   while (true)
   {
-    boilerpumpe.on();
-    boilervalve.close();
-    cout << "TestSensor1= " << testSensor1.temperatur() << "°C TestSensor2= " << testSensor2.temperatur() << "°C" << endl;
+    /* 
+    // production system
+    orl = ofenRuecklauf.temperatur();
+    bu = boilerUnten.temperatur();
+    */
+    // test system
+    orl = testSensor1.temperatur();
+    bu = testSensor2.temperatur();
+    if ( orl + 5 > bu) {
+      cout <<"Ofen Rücklauf " << orl << "°C Boiler unten " << bu << "°C" << endl;
+      boilervalve.open();
+      boilerpumpe.on();
+    }
+    else {
+      cout <<"Ofen Rücklauf " << orl << "°C Boiler unten " << bu << "°C" << endl;
+      boilerpumpe.off();
+      boilervalve.close();
+    }
     delay(5*1000);
-    boilerpumpe.off();
-    boilervalve.open();
-    delay(5*1000);
+    
   }
+  return 0;
 }
