@@ -1,6 +1,8 @@
 /*
 MIT license 
 ch010402 16.10.2020
+
+learning: variable declaration is key; declaire variable as late and as narrow as possible and intialise even later
 */
 
 #include <wiringPi.h> // library to access the GPIO Pins on a raspberryPI !!depriciated!!
@@ -96,18 +98,12 @@ class valve {
 
 class temperaturSensor {
   private:
-    // string device;
     string path;
-    //stringstream buffer;
-    //string data;
-    //string strTemp;
-    //double temp;
   public:
     // constructor declaration
     temperaturSensor(string str);
     // methodes
     double temperatur() {
-      //cout << "----->>>> " << device << " ----->>>> " << path << endl;
       string data;
       ifstream infile(path);
       if (infile) {
@@ -132,7 +128,6 @@ class temperaturSensor {
         return -102;
       }
       string strTemp = data.substr(TempPos+2);
-      //cout << strTemp;
       double temp = stod(strTemp)/1000;
       return temp;
     }
@@ -152,17 +147,14 @@ int main(void) {
   valve boilervalve(28);
   temperaturSensor testSensor1("28-3c01a81688f4");
   temperaturSensor testSensor2("28-3c01a816d9c1");
-  int i = 0;
-  while (i < 10)
+  while (true)
   {
     boilerpumpe.on();
     boilervalve.close();
-    cout << "TestSensor1= " << testSensor1.temperatur() << "°C \nTestSensor2= " << testSensor2.temperatur() << "°C" << endl;
-    delay(1*1000);
+    cout << "TestSensor1= " << testSensor1.temperatur() << "°C TestSensor2= " << testSensor2.temperatur() << "°C" << endl;
+    delay(5*1000);
     boilerpumpe.off();
     boilervalve.open();
-    delay(1*1000);
-    cout << i << endl;
-    i++;
+    delay(5*1000);
   }
 }
