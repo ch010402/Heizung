@@ -46,5 +46,12 @@ device address | description
 - [x] Setup output
 - [ ] ~~Initialisierung~~
 - [x] Read DS18B20 Sensor
-- [ ] Read multiple Sensors and react to them
+- [x] Read multiple Sensors and react to them
+- [ ] Long test run script
+- [ ] Build mix valve class
+- [ ] Long test run script
+- [ ] Change cabling
+- [ ] Extend script to oven pump
+- [ ] Long test run script
+- [ ] Change cabling
 - [ ] ...
