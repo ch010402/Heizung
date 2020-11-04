@@ -1,5 +1,6 @@
 # Heizung
  Heizungssteuerung umgeschrieben auf wiringPi
+ **ACHTUNG wiringPi ist deprecated http://wiringpi.com/news/**
 
 ## Outputs
 	
