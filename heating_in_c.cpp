@@ -19,8 +19,8 @@ int em_pos = 9; // 9 unknown range 0-8
 string testSensor1 = "28-3c01a81688f4"; // sensor on progpi 28-3c01a81688f4
 string testSensor2 = "28-3c01a816d9c1"; // sensor on progpi 28-3c01a816d9c1
 string ofenrueck = "28-0416a10e34ff"; // Ofenrücklauf Sensor
-int wwvalve = 28;
-int wwpump = 21;
+int wwvalve = 21;
+int wwpump = 28;
 
 //----- functions declaration
 int setup(void);
