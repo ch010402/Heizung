@@ -147,8 +147,8 @@ temperaturSensor::temperaturSensor(string str) {
 
 int main(void) {
   // test setup
-  pump boilerpumpe(21);
-  valve boilervalve(28);
+  pump boilerpumpe(28);
+  valve boilervalve(21);
   temperaturSensor testSensor1("28-3c01a81688f4");
   temperaturSensor testSensor2("28-3c01a816d9c1");
   temperaturSensor ofenRuecklauf("28-0416a10e34ff");
