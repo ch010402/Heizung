@@ -49,7 +49,7 @@ device address | description
 - [ ] ~~Initialisierung~~
 - [x] Read DS18B20 Sensor
 - [x] Read multiple Sensors and react to them
-- [ ] Long test run script
+- [X] Long test run script -> successful 
 - [ ] Build mix valve class
 - [ ] Long test run script
 - [ ] Change cabling
