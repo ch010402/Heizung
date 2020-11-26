@@ -1,8 +1,8 @@
 /*
 MIT license 
-ch010402 16.10.2020
-
-learning: variable declaration is key; declaire variable as late and as narrow as possible and intialise even later
+created: ch010402 16.10.2020
+  learning: variable declaration is key; declaire variable as late and as narrow as possible and intialise even later
+changed: ch010402 23.11.2020 mixup pump and valve IO corrected
 */
 
 #include <wiringPi.h> // library to access the GPIO Pins on a raspberryPI !!depriciated!!
@@ -72,7 +72,8 @@ class valve {
         return;
       }
       digitalWrite(pin, LOW);
-      delay(10*1000);
+      // Ventil öffnung 30s
+      delay(15*1000);
       cout << "Ventil geöffnet" << endl;
       oldStatus = newStatus;
     }
@@ -157,21 +158,39 @@ int main(void) {
   double bu;
   while (true)
   { 
-    // production system
-    orl = ofenRuecklauf.temperatur();
-    bu = boilerUnten.temperatur();
-    /*
-    // test system
-    orl = testSensor1.temperatur();
-    bu = testSensor2.temperatur();
-    */
-    if ( orl - 5 > bu) {
-      cout <<"Ofen Rücklauf " << orl << "°C Boiler unten " << bu << "°C" << endl;
-      boilervalve.open();
-      boilerpumpe.on();
+    // set TRUE for productive system otherwise it will run on the test system
+    if (true) {
+      orl = ofenRuecklauf.temperatur();
+      bu = boilerUnten.temperatur();
     }
     else {
-      cout <<"Ofen Rücklauf " << orl << "°C Boiler unten " << bu << "°C" << endl;
+      // test system
+      orl = testSensor1.temperatur();
+      bu = testSensor2.temperatur();
+    }
+    // wenn der Boiler unten unter 70°C hat prüfe weiter
+    if ( bu < 70 ) {
+      // wenn der Ofenrücklauf 5°C oder wärmer ist als der Boiler schalte ein
+      if ( orl - 5 > bu) {
+        cout <<"Ofen Rücklauf " << orl << "°C - Boiler unten " << bu << "°C" << endl;
+        boilervalve.open();
+        boilerpumpe.on();
+      }
+      // wenn der Ofenrücklauf 3° oder wäremer ist schalte nichts 
+      else if (orl - 3 > bu) {
+        cout <<"Ofen Rücklauf " << orl << "°C - Boiler unten " << bu << "°C" << endl;
+        cout <<"schalte nichts" << endl;
+      }
+      // wenn der Ofenrücklauf 3°C wärmer oder weniger ist als der Boiler schalte aus
+      else {
+        cout <<"Ofen Rücklauf " << orl << "°C Boiler unten " << bu << "°C" << endl;
+        boilerpumpe.off();
+        boilervalve.close();
+      }
+    }
+    // wenn der Boiler mehr als 70° hat schalte aus
+    else {
+      cout <<"Der Boiler hat " << bu << "°C" << endl;
       boilerpumpe.off();
       boilervalve.close();
     }
