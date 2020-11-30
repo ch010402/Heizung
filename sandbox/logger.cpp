@@ -3,15 +3,17 @@ MIT license
 created: ch010402 23.11.2020
   learning: argc (count of argumnets given with the program start) argv (arguments array)
 changed: ch010402 30.11.2020
+description:
+  Logger class with main methode log(string msg) takes a string and appends it to a logfile that has the same name as the running script with the current date. If the logfile is bigge than 1 MB (hard coded) a new logfile will be created either with the current date or if the same date with an itterator eg: -1..n.
 */
 
 
-#include <iostream>   // cout
-#include <chrono>
-#include "include/date.h"
-#include <string>
-#include <fstream>
-#include <unistd.h>
+#include <iostream>       // cout
+#include <chrono>         // get the syste
+#include "include/date.h" // format the time https://howardhinnant.github.io/date/date.html#to_stream_formatting
+#include <string>         // handle strings
+#include <fstream>        // handle files 
+#include <unistd.h>       // used for usleep
 
 using namespace std;
 
@@ -26,8 +28,6 @@ class Logger{
   void log(string msg) {
     // check if inizilized, if not do
     if (!initialized) initialize();
-    // check if filesitze is bigger than xy bytes
-    // todo
     // open or create file 
     ofstream logfile;
     logfile.open(file, ios::app);
@@ -36,12 +36,13 @@ class Logger{
       logfile << timestamp() << " : " << msg << "\n";
     }
     else cout << "Unable to open file";
-    // close file
     int size = logfile.tellp();
+    // close file
     logfile.close();
-    cout << "log entry written, file size "<< size <<"Byte \n";
+    cout << "log entry written, file size "<< size <<" Byte \n";
+    // check if filesitze is bigger than 1M bytes
     if (size > 1000000) {
-      exit(EXIT_FAILURE);
+      // exit(EXIT_FAILURE);
       initialized = false;
     }
   }
@@ -50,6 +51,7 @@ class Logger{
     // get the current timestamp with timezone
     auto now = chrono::system_clock::now();
     string ts = date::format("%F %X %Z", now);
+    // the timezone is UTC TODO: change to locale tz
     return ts;
   }
   string today(){
@@ -64,7 +66,7 @@ class Logger{
     size_t fileNamePos = fullFileName.find_last_of("/");
     if (fileNamePos == string::npos) {
       cout << "file name not found, abort" << endl;
-      return "filename";
+      return "nofilename";
     }
     string file = fullFileName.substr(fileNamePos+1);
     string fn = file + "_" + today() + ".log";
@@ -76,6 +78,7 @@ class Logger{
     // inzilialize = create the filename 
     file = filename(argv_0);
     int i = 1;
+    // if the filename already exists create a new one with -itterator 
     while (filesystem::exists(file)){ 
       string s = to_string(i);
       int minus = file.length() - file.find_last_of("-");
@@ -90,10 +93,13 @@ class Logger{
 
 int main(int argc, char** argv){
   
-  Logger log(argv[0]);
-  for (int i =0; i < 5000; i++ ){
-    log.log("This is a verry long log entry that probably will not happen in real life but for testin reasons we try how much disk space it will use up per log to calculate how many are needed to fill one Megabyte.");
-    //usleep(5 * 1000 *1000);
-  };
+  bool test = true;
+  if (test) {
+    Logger log(argv[0]);
+    for (int i =0; i < 5000; i++ ){
+      log.log("This is log entry number " + to_string(i));
+      usleep(20 * 1000 *1000);
+    };
+  }
   return 0;
 };
