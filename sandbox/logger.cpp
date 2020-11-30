@@ -17,18 +17,21 @@ using namespace std;
 int main(int argc, char** argv){
 
   auto now = chrono::system_clock::now(); 
-  string formated_now = date::format("%F %X %Z", now);
-  cout << formated_now << endl;
+  string timestamp = date::format("%F %X %Z", now);
+  string date = date::format("%F", now);
+  
   
   string fullFileName = argv[0];
-  size_t fileNamePos = fullFileName.find("/");
+  size_t fileNamePos = fullFileName.find_last_of("/");
   if (fileNamePos == string::npos) {
     cout << "file name not found, abort" << endl;
     return -100;
   }
-  string fileName = fullFileName.substr(fileNamePos+1);
+  string file = fullFileName.substr(fileNamePos+1);
+  string fileName = file + "_" + date + ".log";
   
   cout << fileName << endl;
+  cout << timestamp << endl;
   
   return 0;
 }
