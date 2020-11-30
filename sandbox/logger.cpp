@@ -14,11 +14,12 @@ changed:
 using namespace std;
 
 
-int main(void){
+int main(int argc, char** argv){
 
   auto now = chrono::system_clock::now(); 
   string formated_now = date::format("%F %X %Z", now);
   cout << formated_now << endl;
+  cout << argv[0] << endl;
 
   return 0;
 }
