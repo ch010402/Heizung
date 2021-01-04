@@ -5,7 +5,7 @@ created: ch010402 16.10.2020
 changed: ch010402 23.11.2020 mixup pump and valve IO corrected
 */
 
-#include <wiringPi.h> // library to access the GPIO Pins on a raspberryPI !!depriciated!!
+#include "wiringPi.h" // library to access the GPIO Pins on a raspberryPI !!depriciated!!
 #include <iostream>   // cout
 #include <fstream>    // file stream access
 #include <string>     // string class
