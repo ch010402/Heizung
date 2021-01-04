@@ -31,8 +31,11 @@ private:
 public:
 	static void Setup(const char* argv0, Log::Level level) { return Get().I_Setup(argv0, level); };
 	static void Error(const char* message) { return Get().I_Error(message); };
+	static void Error(std::string message) { return Get().I_Error(message.c_str()); };
 	static void Warning(const char* message) { return Get().I_Warn(message); };
+	static void Warning(std::string message) { return Get().I_Warn(message.c_str()); };
 	static void Info(const char* message) { return Get().I_Info(message); };
+	static void Info(std::string message) { return Get().I_Info(message.c_str()); };
 	static void PrintInformation() { return Get().I_PrintInformation(); };
 
 private:

@@ -54,8 +54,7 @@ class pump {
         wiringPiSetup();
         pinMode(pin,OUTPUT);
         digitalWrite(pin, HIGH);
-        std::string msg = "initialized pin: " + to_string(pin);
-        Log::Warning(msg.c_str());
+        Log::Warning("initialized pin: " + to_string(pin));
         initialized = true;
       }
 };
@@ -100,8 +99,7 @@ class valve {
       wiringPiSetup();
       pinMode(pin,OUTPUT);
       digitalWrite(pin, HIGH);
-      std::string msg = "initialized pin: " + to_string(pin);
-      Log::Warning(msg.c_str());
+      Log::Warning("initialized pin: " + to_string(pin));
       initialized = true;
     }
 };
@@ -124,8 +122,7 @@ class temperaturSensor {
       }
       else {
         infile.close();
-        std::string msg = "Error reading file at " + path;
-        Log::Error(msg.c_str());
+        Log::Error("Error reading file at " + path);
         return -100;
       }
       size_t crcCheck = data.find("YES");
@@ -181,8 +178,7 @@ int main(int argc, const char** argv) {
     // wenn der Boiler unten unter 70°C hat prüfe weiter
     if ( bu < 70 ) {
       // wenn der Ofenrücklauf 5°C oder wärmer ist als der Boiler schalte ein
-      std::string msg = "Ofen R\x81\cklauf " + to_string(orl) + " \370\C - Boiler unten " + to_string(bu) + "\370\C";
-      Log::Info(msg.c_str());
+      Log::Info("Ofen Rücklauf " + to_string(orl) + " °C - Boiler unten " + to_string(bu) + "°C");
       if ( orl - 5 > bu) {      
         boilervalve.open();
         boilerpumpe.on();
@@ -199,8 +195,7 @@ int main(int argc, const char** argv) {
     }
     // wenn der Boiler mehr als 70° hat schalte aus
     else {
-      std::string msg = "Der Boiler hat " + to_string(bu) + "\370\C";
-      Log::Info(msg.c_str());
+      Log::Info("Der Boiler hat " + to_string(bu) + "°C");
       boilerpumpe.off();
       boilervalve.close();
     }
