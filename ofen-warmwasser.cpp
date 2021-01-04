@@ -10,8 +10,11 @@ changed: ch010402 23.11.2020 mixup pump and valve IO corrected
 #include <fstream>    // file stream access
 #include <string>     // string class
 #include <sstream>    // string stream needed for file access to put data into string
+#include "logger/Log.h" // Event Logger class 
 
 using namespace std;
+
+
 
 //----- classes
 class pump {
@@ -120,6 +123,8 @@ class temperaturSensor {
       else {
         infile.close();
         cout << "Error reading file at " << path << endl;
+        std::string msg = "Error reading file at " + path;
+        Log::Error(msg.c_str());
         return -100;
       }
       size_t crcCheck = data.find("YES");
@@ -146,7 +151,8 @@ temperaturSensor::temperaturSensor(string str) {
   path = baseDir + device + tempFile;
 }
 
-int main(void) {
+int main(int argc, const char** argv ) {
+  Log::Setup(argv[0], Log::Level::LevelInfo);
   // test setup
   pump boilerpumpe(28);
   valve boilervalve(21);
