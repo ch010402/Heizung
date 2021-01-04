@@ -11,6 +11,8 @@ changed: ch010402 23.11.2020 mixup pump and valve IO corrected
 #include <string>     // string class
 #include <sstream>    // string stream needed for file access to put data into string
 #include "logger/Log.h" // Logger class
+#include <chrono>
+#include <thread>
 
 using namespace std;
 
@@ -52,7 +54,7 @@ class pump {
         wiringPiSetup();
         pinMode(pin,OUTPUT);
         digitalWrite(pin, HIGH);
-        std::string msg = "initialized pin: " + pin;
+        std::string msg = "initialized pin: " + to_string(pin);
         Log::Warning(msg.c_str());
         initialized = true;
       }
@@ -98,7 +100,7 @@ class valve {
       wiringPiSetup();
       pinMode(pin,OUTPUT);
       digitalWrite(pin, HIGH);
-      std::string msg = "initialized pin: " + pin;
+      std::string msg = "initialized pin: " + to_string(pin);
       Log::Warning(msg.c_str());
       initialized = true;
     }
@@ -151,7 +153,7 @@ temperaturSensor::temperaturSensor(string str) {
 }
 
 int main(int argc, const char** argv) {
-  Log::Setup(argv[0], Log::Level::LevelInfo);
+  Log::Setup(argv[0], Log::Level::LevelWarning);
   Log::Warning("starting up ... ");
   // test setup
   pump boilerpumpe(28);
@@ -202,7 +204,8 @@ int main(int argc, const char** argv) {
       boilerpumpe.off();
       boilervalve.close();
     }
-    delay(5*1000);
+    
+    std::this_thread::sleep_for(std::chrono::milliseconds(5 * 1000));
     
   }
   return 0;
