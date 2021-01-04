@@ -153,7 +153,7 @@ temperaturSensor::temperaturSensor(string str) {
 }
 
 int main(int argc, const char** argv) {
-  Log::Setup(argv[0], Log::Level::LevelWarning);
+  Log::Setup(argv[0], Log::Level::LevelInfo);
   Log::Warning("starting up ... ");
   // test setup
   pump boilerpumpe(28);
@@ -162,8 +162,8 @@ int main(int argc, const char** argv) {
   temperaturSensor testSensor2("28-3c01a816d9c1");
   temperaturSensor ofenRuecklauf("28-0416a10e34ff");
   temperaturSensor boilerUnten("28-0416a1295fff");
-  double orl;
-  double bu;
+  float orl;
+  float bu;
   while (true)
   { 
     // set TRUE for productive system otherwise it will run on the test system
@@ -181,26 +181,26 @@ int main(int argc, const char** argv) {
     // wenn der Boiler unten unter 70°C hat prüfe weiter
     if ( bu < 70 ) {
       // wenn der Ofenrücklauf 5°C oder wärmer ist als der Boiler schalte ein
-      if ( orl - 5 > bu) {
-        cout <<"Ofen Rücklauf " << orl << "°C - Boiler unten " << bu << "°C" << endl;
+      std::string msg = "Ofen R\x81\cklauf " + to_string(orl) + " \370\C - Boiler unten " + to_string(bu) + "\370\C";
+      Log::Info(msg.c_str());
+      if ( orl - 5 > bu) {      
         boilervalve.open();
         boilerpumpe.on();
       }
       // wenn der Ofenrücklauf 3° oder wäremer ist schalte nichts 
       else if (orl - 3 > bu) {
-        cout <<"Ofen Rücklauf " << orl << "°C - Boiler unten " << bu << "°C" << endl;
-        cout <<"schalte nichts" << endl;
+        Log::Info("schalte nichts");
       }
       // wenn der Ofenrücklauf 3°C wärmer oder weniger ist als der Boiler schalte aus
       else {
-        cout <<"Ofen Rücklauf " << orl << "°C Boiler unten " << bu << "°C" << endl;
         boilerpumpe.off();
         boilervalve.close();
       }
     }
     // wenn der Boiler mehr als 70° hat schalte aus
     else {
-      cout <<"Der Boiler hat " << bu << "°C" << endl;
+      std::string msg = "Der Boiler hat " + to_string(bu) + "\370\C";
+      Log::Info(msg.c_str());
       boilerpumpe.off();
       boilervalve.close();
     }
