@@ -39,7 +39,7 @@ void Log::I_Error(const char* message)
 	{
 		Timestamp();
 		std::cout << Log::m_Timestamp << " [ERROR]: " << message << std::endl;
-		WriteFile(message, " [ERROR]: ");
+		WriteFile(message, "[ERROR]:");
 	}
 };
 
@@ -62,6 +62,17 @@ void Log::I_Info(const char* message)
 		WriteFile(message, "[INFO]:");
 	}
 }
+
+void Log::I_Debug(const char* message)
+{
+  if (m_LogLevel >= Log::Level::Debug)
+  {
+	Timestamp();
+	std::cout << Log::m_Timestamp << " [DEBUG]: " << message << std::endl;
+	WriteFile(message, "[DEBUG]:");
+  }
+}
+
 
 void Log::CreateFileName()
 {
@@ -165,7 +176,7 @@ void Log::WriteFile(const char* message , const char* level)
 	if (LogFile.tellp() > 1000000) m_inintialized = false;
 	LogFile.close();
 	
-	std::cout << "made " << s_AllocCount << " allocations" << std::endl;
+	//std::cout << "made " << s_AllocCount << " allocations" << std::endl;
 
 }
 

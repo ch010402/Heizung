@@ -29,7 +29,7 @@ class pump {
       bool newStatus = true;
       if (!initialized) initialize();
       if (newStatus == oldStatus) {
-        Log::Info("Pumpe bereits eingeschaltet");
+        Log::Debug("Pumpe bereits eingeschaltet");
         return;
       }
       digitalWrite(pin, LOW);
@@ -40,7 +40,7 @@ class pump {
       bool newStatus = false;
       if (!initialized) initialize();
       if (newStatus == oldStatus) {
-        Log::Info("Pumpe bereits ausgeschaltet");
+        Log::Debug("Pumpe bereits ausgeschaltet");
         return;
       }
       digitalWrite(pin, HIGH);
@@ -71,7 +71,7 @@ class valve {
       bool newStatus = true;
       if (!initialized) initialize();
       if (newStatus == oldStatus) {
-        Log::Info("Ventil bereits geöffnet");
+        Log::Debug("Ventil bereits geöffnet");
         return;
       }
       digitalWrite(pin, LOW);
@@ -84,7 +84,7 @@ class valve {
       bool newStatus = false;
       if (!initialized) initialize();
       if (newStatus == oldStatus) {
-        Log::Info("Ventil bereits geschlossen");
+        Log::Debug("Ventil bereits geschlossen");
         return;
       }
       digitalWrite(pin, HIGH);
@@ -150,8 +150,10 @@ temperaturSensor::temperaturSensor(string str) {
 }
 
 int main(int argc, const char** argv) {
+
   Log::Setup(argv[0], Log::Level::LevelInfo);
   Log::Warning("starting up ... ");
+  
   // test setup
   pump boilerpumpe(28);
   valve boilervalve(21);
@@ -165,12 +167,12 @@ int main(int argc, const char** argv) {
   { 
     // set TRUE for productive system otherwise it will run on the test system
     if (true) {
-      Log::Info("running on productive system");
+      Log::Debug("running on productive system");
       orl = ofenRuecklauf.temperatur();
       bu = boilerUnten.temperatur();
     }
     else {
-      Log::Info("running on test system");
+      Log::Debug("running on test system");
       // test system
       orl = testSensor1.temperatur();
       bu = testSensor2.temperatur();
@@ -178,14 +180,14 @@ int main(int argc, const char** argv) {
     // wenn der Boiler unten unter 70°C hat prüfe weiter
     if ( bu < 70 ) {
       // wenn der Ofenrücklauf 5°C oder wärmer ist als der Boiler schalte ein
-      Log::Info("Ofen Rücklauf " + to_string(orl) + " °C - Boiler unten " + to_string(bu) + "°C");
+      Log::Debug("Ofen Rücklauf " + to_string(orl) + " °C - Boiler unten " + to_string(bu) + "°C");
       if ( orl - 5 > bu) {      
         boilervalve.open();
         boilerpumpe.on();
       }
       // wenn der Ofenrücklauf 3° oder wäremer ist schalte nichts 
       else if (orl - 3 > bu) {
-        Log::Info("schalte nichts");
+        Log::Debug("schalte nichts");
       }
       // wenn der Ofenrücklauf 3°C wärmer oder weniger ist als der Boiler schalte aus
       else {
@@ -195,7 +197,7 @@ int main(int argc, const char** argv) {
     }
     // wenn der Boiler mehr als 70° hat schalte aus
     else {
-      Log::Info("Der Boiler hat " + to_string(bu) + "°C");
+      Log::Debug("Der Boiler hat " + to_string(bu) + "°C");
       boilerpumpe.off();
       boilervalve.close();
     }

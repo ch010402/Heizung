@@ -16,7 +16,7 @@ public:
 
 	enum class Level
 	{
-		LevelError = 0, LevelWarning, LevelInfo
+		LevelError = 0, LevelWarning, LevelInfo, Debug
 	};
 
 private:
@@ -36,12 +36,15 @@ public:
 	static void Warning(std::string message) { return Get().I_Warn(message.c_str()); };
 	static void Info(const char* message) { return Get().I_Info(message); };
 	static void Info(std::string message) { return Get().I_Info(message.c_str()); };
+	static void Debug(const char* message) { return Get().I_Debug(message); };
+	static void Debug(std::string message) { return Get().I_Debug(message.c_str()); }
 	static void PrintInformation() { return Get().I_PrintInformation(); };
 
 private:
 	void I_Error(const char* message);
 	void I_Warn(const char* message);
 	void I_Info(const char* message);
+	void I_Debug(const char* message);
 	void I_Setup(const char* argv0, Log::Level level);
 	void I_PrintInformation();
 	void Initialize();

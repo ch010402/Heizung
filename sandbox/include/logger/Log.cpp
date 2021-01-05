@@ -63,6 +63,17 @@ void Log::I_Info(const char* message)
 	}
 }
 
+void Log::I_Debug(const char* message)
+{
+  if (m_LogLevel >= Log::Level::Debug)
+  {
+	Timestamp();
+	std::cout << Log::m_Timestamp << " [DEBUG]: " << message << std::endl;
+	WriteFile(message, "[DEBUG]:");
+  }
+}
+
+
 void Log::CreateFileName()
 {
 	std::string FullFileName = m_StartFileName;
