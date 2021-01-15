@@ -18,7 +18,7 @@ nr. | shortname | BCM | wPI | O | Bezeichnung | Kommentar
  9 | ema | 25 |  **6** | 2.4 | Elektromischer auf |
 10 | emz | 24 |  **5** | 2.3 | Elektromischer zu |
 11 | bv  |  5 | **21** | 2.2 | Boilerventil auf/zu |
-12 | ev  | 22 |  **3** | 2.1 | Elektroventil auf/zu | 
+12 | sv  | 22 |  **3** | 2.1 | Speicherventil auf/zu | 
 13 | er  | 23 |  **4** | 1.4 | Elektrorelais | 
 14 | sp1 | 18 |  **1** | 1.3 | Reserve | 
 15 | sp2 | 27 |  **2** | 1.2 | Reserve |
