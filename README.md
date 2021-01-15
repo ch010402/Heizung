@@ -17,12 +17,12 @@ nr. | shortname | BCM | wPI | O | Bezeichnung | Kommentar
  8 | hmz |  6 | **22** | 3.1 | Heizmischer zu |
  9 | ema | 25 |  **6** | 2.4 | Elektromischer auf |
 10 | emz | 24 |  **5** | 2.3 | Elektromischer zu |
-11 | bva |  5 | **21** | 2.2 | Boilerventil auf/zu |
-12 | bvz | 22 |  **3** | 2.1 | ~~Boilerventil zu~~ | *nicht benutzt*
-13 | eva | 23 |  **4** | 1.4 | Elektroventil auf/zu | 
-14 | evz | 18 |  **1** | 1.3 | ~~Elektroventil auf/zu~~ | *nicht benutzt*
-15 | er  | 27 |  **2** | 1.2 | Elektrorelais |
-16 | sp	 |    |  **0** | 1.1 | Reserve |
+11 | bv  |  5 | **21** | 2.2 | Boilerventil auf/zu |
+12 | ev  | 22 |  **3** | 2.1 | Elektroventil auf/zu | 
+13 | er  | 23 |  **4** | 1.4 | Elektrorelais | 
+14 | sp1 | 18 |  **1** | 1.3 | Reserve | 
+15 | sp2 | 27 |  **2** | 1.2 | Reserve |
+16 | sp3 |    |  **0** | 1.1 | Reserve |
 
 ## Inputs
 device address | description
