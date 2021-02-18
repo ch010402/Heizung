@@ -171,7 +171,7 @@ int main(int argc, const char** argv) {
   while (true)
   { 
     // set TRUE for productive system otherwise it will run on the test system
-    if (true) {
+    if (false) {
       Log::Debug("running on productive system");
       orl = ofenRuecklauf.temperatur();
       bu = boilerUnten.temperatur();
