@@ -5,11 +5,14 @@ created: ch010402 16.10.2020
 changed: ch010402 23.11.2020 mixup pump and valve IO corrected
 */
 
-#include <wiringPi.h> // library to access the GPIO Pins on a raspberryPI !!depriciated!!
+#include "wiringPi.h" // library to access the GPIO Pins on a raspberryPI !!depriciated!!
 #include <iostream>   // cout
 #include <fstream>    // file stream access
 #include <string>     // string class
 #include <sstream>    // string stream needed for file access to put data into string
+#include "logger/Log.h" // Logger class
+#include <chrono>
+#include <thread>
 
 using namespace std;
 
@@ -26,22 +29,22 @@ class pump {
       bool newStatus = true;
       if (!initialized) initialize();
       if (newStatus == oldStatus) {
-        cout << "Pumpe bereits eingeschaltet" << endl;
+        Log::Debug("Pumpe bereits eingeschaltet");
         return;
       }
       digitalWrite(pin, LOW);
-      cout << "Pumpe eingeschaltet" << endl;
+      Log::Info("Pumpe eingeschaltet");
       oldStatus = newStatus;
     }
     void off() {
       bool newStatus = false;
       if (!initialized) initialize();
       if (newStatus == oldStatus) {
-        cout << "Pumpe bereits ausgeschaltet" << endl;
+        Log::Debug("Pumpe bereits ausgeschaltet");
         return;
       }
       digitalWrite(pin, HIGH);
-      cout << "Pumpe ausgeschaltet" << endl;
+      Log::Info("Pumpe ausgeschaltet");
       oldStatus = newStatus;
     }
     private:
@@ -51,7 +54,7 @@ class pump {
         wiringPiSetup();
         pinMode(pin,OUTPUT);
         digitalWrite(pin, HIGH);
-        cout << "initialized pin: " << pin << endl;
+        Log::Warning("initialized pin: " + to_string(pin));
         initialized = true;
       }
 };
@@ -68,25 +71,25 @@ class valve {
       bool newStatus = true;
       if (!initialized) initialize();
       if (newStatus == oldStatus) {
-        cout << "Ventil bereits geöffnet" << endl;
+        Log::Debug("Ventil bereits geöffnet");
         return;
       }
       digitalWrite(pin, LOW);
       // Ventil öffnung 30s
       delay(15*1000);
-      cout << "Ventil geöffnet" << endl;
+      Log::Info("Ventil geöffnet");
       oldStatus = newStatus;
     }
     void close() {
       bool newStatus = false;
       if (!initialized) initialize();
       if (newStatus == oldStatus) {
-        cout << "Ventil bereits geschlossen" << endl;
+        Log::Debug("Ventil bereits geschlossen");
         return;
       }
       digitalWrite(pin, HIGH);
       delay(10*1000);
-      cout << "Ventil geschlossen" << endl;
+      Log::Info("Ventil geschlossen");
       oldStatus = newStatus;
     }
   private:
@@ -96,7 +99,7 @@ class valve {
       wiringPiSetup();
       pinMode(pin,OUTPUT);
       digitalWrite(pin, HIGH);
-      cout << "initialized pin: " << pin << endl;
+      Log::Warning("initialized pin: " + to_string(pin));
       initialized = true;
     }
 };
@@ -119,17 +122,17 @@ class temperaturSensor {
       }
       else {
         infile.close();
-        cout << "Error reading file at " << path << endl;
+        Log::Error("Error reading file at " + path);
         return -100;
       }
       size_t crcCheck = data.find("YES");
       if (crcCheck == string::npos) {
-        cout << "CRC fail not reading temperatur" << endl;
+        Log::Error("CRC fail not reading temperatur");
         return -101;
       }
       size_t TempPos = data.find("t=");
       if (TempPos == string::npos) {
-        cout << "failed to find value -> abort!" << endl;
+        Log::Error("failed to find value -> abort!");
         return -102;
       }
       string strTemp = data.substr(TempPos+2);
@@ -146,24 +149,34 @@ temperaturSensor::temperaturSensor(string str) {
   path = baseDir + device + tempFile;
 }
 
-int main(void) {
-  // test setup
+int main(int argc, const char** argv) {
+
+  Log::Setup(argv[0], Log::Level::LevelInfo);
+  Log::Warning("starting up ... ");
+  
+  // setup
   pump boilerpumpe(28);
   valve boilervalve(21);
+  valve speichervalve(3);
   temperaturSensor testSensor1("28-3c01a81688f4");
   temperaturSensor testSensor2("28-3c01a816d9c1");
   temperaturSensor ofenRuecklauf("28-0416a10e34ff");
   temperaturSensor boilerUnten("28-0416a1295fff");
-  double orl;
-  double bu;
+  float orl;
+  float bu;
+  speichervalve.open();
+  
+  // loop
   while (true)
   { 
     // set TRUE for productive system otherwise it will run on the test system
     if (true) {
+      Log::Debug("running on productive system");
       orl = ofenRuecklauf.temperatur();
       bu = boilerUnten.temperatur();
     }
     else {
+      Log::Debug("running on test system");
       // test system
       orl = testSensor1.temperatur();
       bu = testSensor2.temperatur();
@@ -171,30 +184,29 @@ int main(void) {
     // wenn der Boiler unten unter 70°C hat prüfe weiter
     if ( bu < 70 ) {
       // wenn der Ofenrücklauf 5°C oder wärmer ist als der Boiler schalte ein
-      if ( orl - 5 > bu) {
-        cout <<"Ofen Rücklauf " << orl << "°C - Boiler unten " << bu << "°C" << endl;
+      Log::Debug("Ofen Rücklauf " + to_string(orl) + " °C - Boiler unten " + to_string(bu) + "°C");
+      if ( orl - 5 > bu) {      
         boilervalve.open();
         boilerpumpe.on();
       }
       // wenn der Ofenrücklauf 3° oder wäremer ist schalte nichts 
       else if (orl - 3 > bu) {
-        cout <<"Ofen Rücklauf " << orl << "°C - Boiler unten " << bu << "°C" << endl;
-        cout <<"schalte nichts" << endl;
+        Log::Debug("schalte nichts");
       }
       // wenn der Ofenrücklauf 3°C wärmer oder weniger ist als der Boiler schalte aus
       else {
-        cout <<"Ofen Rücklauf " << orl << "°C Boiler unten " << bu << "°C" << endl;
         boilerpumpe.off();
         boilervalve.close();
       }
     }
     // wenn der Boiler mehr als 70° hat schalte aus
     else {
-      cout <<"Der Boiler hat " << bu << "°C" << endl;
+      Log::Debug("Der Boiler hat " + to_string(bu) + "°C");
       boilerpumpe.off();
       boilervalve.close();
     }
-    delay(5*1000);
+    
+    std::this_thread::sleep_for(std::chrono::milliseconds(5 * 1000));
     
   }
   return 0;
