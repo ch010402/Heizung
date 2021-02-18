@@ -151,7 +151,7 @@ temperaturSensor::temperaturSensor(string str) {
 
 int main(int argc, const char** argv) {
 
-  Log::Setup(argv[0], Log::Level::LevelInfo);
+  Log::Setup(argv[0], Log::Level::Debug);
   Log::Warning("starting up ... ");
   
   // setup
