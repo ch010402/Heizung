@@ -80,7 +80,7 @@ void Log::CreateFileName()
 	size_t FileNamePos = FullFileName.find_last_of("\\");
 	if (FileNamePos == std::string::npos)
 	{
-		std::cout << "in linux ";
+		//std::cout << "in linux ";
 		FileNamePos = FullFileName.find_last_of("/");
 		if (FileNamePos == std::string::npos)
 		{
