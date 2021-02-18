@@ -151,11 +151,12 @@ temperaturSensor::temperaturSensor(string str) {
 
 int main(int argc, const char** argv) {
 
-  Log::Setup(argv[0], Log::Level::Debug);
+  Log::Setup(argv[0], Log::Level::LevelInfo);
   Log::Warning("starting up ... ");
   
   // setup
   pump boilerpumpe(28);
+  pump umlaufpumpe(29);
   valve boilervalve(21);
   valve speichervalve(3);
 
@@ -165,7 +166,10 @@ int main(int argc, const char** argv) {
   temperaturSensor boilerUnten("28-0416a1295fff");
   float orl;
   float bu;
+  
   speichervalve.open();
+  umlaufpumpe.on();
+
   
   // loop
   while (true)
