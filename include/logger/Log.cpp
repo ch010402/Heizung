@@ -135,11 +135,15 @@ std::string Log::GetDate()
 	std::time_t in_time_t = std::chrono::system_clock::to_time_t(now);
 
 	std::tm buffer;
-	#ifdef defined __linux__
-	localtime_r(&in_time_t, &buffer);
-	#elif defined _WIN32 || defined _WIN64
+
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
+	//define something for Windows (32-bit and 64-bit, this part is common)
 	localtime_s(&buffer, &in_time_t);
-	#endif
+#elif defined __linux__
+	localtime_r(&in_time_t, &buffer);
+#else
+	#   error "Unknown compiler"
+#endif
 
 	std::stringstream ss;
 	ss << std::put_time(&buffer, "%Y-%m-%d");
@@ -152,11 +156,14 @@ void Log::Timestamp()
 	std::time_t in_time_t = std::chrono::system_clock::to_time_t(now);
 
 	std::tm buffer;
-	#ifdef defined __linux__
-	localtime_r(&in_time_t, &buffer);
-	#elif defined _WIN32 || defined _WIN64
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
+	//define something for Windows (32-bit and 64-bit, this part is common)
 	localtime_s(&buffer, &in_time_t);
-	#endif
+#elif defined __linux__
+	localtime_r(&in_time_t, &buffer);
+#else
+#   error "Unknown compiler"
+#endif
 
 	std::stringstream ss;
 	ss << std::put_time(&buffer, "%Y-%m-%d %X");
