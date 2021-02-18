@@ -51,9 +51,12 @@ device address | description
 - [x] Read multiple Sensors and react to them
 - [X] Long test run script -> successful 
 - [ ] Build mix valve class
-- [ ] Long test run script
-- [ ] Change cabling
+- [x] Long test run script
+- [x] Change cabling
 - [ ] Extend script to oven pump
 - [ ] Long test run script
-- [ ] Change cabling
+- [x] Change cabling
+- [ ] Extend logger to log differently in file and on screen
+- [ ] Build Electro Warm Water (eww) script <- needs mix valve class 
+- [ ] Long test run script
 - [ ] ...
