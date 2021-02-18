@@ -154,15 +154,19 @@ int main(int argc, const char** argv) {
   Log::Setup(argv[0], Log::Level::LevelInfo);
   Log::Warning("starting up ... ");
   
-  // test setup
+  // setup
   pump boilerpumpe(28);
   valve boilervalve(21);
+  valve speichervalve(3);
   temperaturSensor testSensor1("28-3c01a81688f4");
   temperaturSensor testSensor2("28-3c01a816d9c1");
   temperaturSensor ofenRuecklauf("28-0416a10e34ff");
   temperaturSensor boilerUnten("28-0416a1295fff");
   float orl;
   float bu;
+  speichervalve.open();
+  
+  // loop
   while (true)
   { 
     // set TRUE for productive system otherwise it will run on the test system
