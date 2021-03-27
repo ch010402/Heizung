@@ -205,7 +205,7 @@ private:
     Log::Warning("initialize mixer: " + to_string(fullCycleSec) + "s");
     digitalWrite(openPin, HIGH);
     digitalWrite(closePin, LOW);
-    std::this_thread::sleep_for(std::chrono::milliseconds(stepTime*steps));
+    std::this_thread::sleep_for(std::chrono::milliseconds(fullCycleSec*1000));
     digitalWrite(closePin, HIGH);
     Log::Warning("initialize mixer: done");
     currentStep = 0;
