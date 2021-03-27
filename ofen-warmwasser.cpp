@@ -294,9 +294,10 @@ bool checkNiederTarif() {
     return true;
   }
   else {
-    return false;
     Log::Debug("Hochtarif " + hour);
+    return false;
   }
+  Log::Error("Fehler beim bestimmen der Zeit");
   return false;
 }
 
