@@ -210,10 +210,14 @@ private:
     std::cout << "log";
     // actually initialize
     Log::Warning("initialize mixer: " + to_string(fullCycleSec) + "s");
+    std::cout << "log";
     digitalWrite(openPin, HIGH);
+    std::cout << "set openpin";
     digitalWrite(closePin, LOW);
+    std::cout << "set setclose";
     std::cout << steps;
     for (int i = 0; i < steps; i++) {
+      std::cout << "for loop";
       std::this_thread::sleep_for(std::chrono::milliseconds(stepTime));
       std::cout << (100 / steps * i + "% ");
     }
