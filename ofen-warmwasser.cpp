@@ -149,7 +149,7 @@ class mixer {
 public:
   int openPin;
   int closePin;
-  int fullCycleSec;
+  int fullCycleSec = 10;
   // constructor
   mixer(int open, int close, int sec) {
     openPin = open;
@@ -297,7 +297,7 @@ bool checkNiederTarif() {
     return false;
     Log::Debug("Hochtarif " + hour);
   }
-}
+};
 
 int main(int argc, const char** argv) {
 
@@ -382,7 +382,7 @@ int main(int argc, const char** argv) {
     // loop
     while (true) {
       // wenn der Boiler unten unter 30° prüfe ob niedertarif
-      if (bu < 30) {
+      if (boilerUnten.temperatur() < 30) {
         if (checkNiederTarif()) {
           Log::Warning("schalte Aufheizen ein");
           aufheizen = true;
@@ -421,7 +421,7 @@ int main(int argc, const char** argv) {
         elektromixer.open();
         Log::Debug("öffne Mischer");
       }
-      if (bu > 60) {
+      if (boilerUnten.temperatur() > 60) {
         Log::Warning("schalte Aufheizen aus");
         aufheizen = false;
       }
