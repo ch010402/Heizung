@@ -2,7 +2,9 @@
 MIT license 
 created: ch010402 16.10.2020
   learning: variable declaration is key; declaire variable as late and as narrow as possible and intialise even later
-changed: ch010402 23.11.2020 mixup pump and valve IO corrected
+changed: 
+  ch010402 23.11.2020 mixup pump and valve IO corrected
+  ch010402 27.03.2021 ready for real run
 */
 
 #include "wiringPi.h" // library to access the GPIO Pins on a raspberryPI !!depriciated!!
