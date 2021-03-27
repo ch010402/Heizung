@@ -306,6 +306,8 @@ int main(int argc, const char** argv) {
   Log::Setup(argv[0], Log::Level::LevelInfo);
   Log::Warning("starting up ... ");
   
+  std::cout << "argv-1 " << argv[1] << std::endl;
+
   // setup
   pump boilerpumpe(28);
   pump umlaufpumpe(29);
