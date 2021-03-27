@@ -19,10 +19,10 @@ nr. | shortname | BCM | wPI | O | Bezeichnung | Kommentar
 10 | emz | 24 |  **5** | 2.3 | Elektromischer zu |
 11 | bv  |  5 | **21** | 2.2 | Boilerventil auf/zu |
 12 | sv  | 22 |  **3** | 2.1 | Speicherventil auf/zu | 
-13 | er  | 23 |  **4** | 1.4 | Elektrorelais | 
-14 | sp1 | 18 |  **1** | 1.3 | Reserve | 
-15 | sp2 | 27 |  **2** | 1.2 | Reserve |
-16 | sp3 |    |  **0** | 1.1 | Reserve |
+13 | er  | 23 |  ~~**4**~~ | 4.4 | defekt | 
+14 | sp1 | 18 |  **1** | 4.3 | Elektrorelais | 
+15 | sp2 | 27 |  **2** | 4.2 | Reserve |
+16 | sp3 |    |  **0** | 4.1 | Reserve |
 
 ## Inputs
 device address | description
@@ -53,10 +53,11 @@ device address | description
 - [ ] Build mix valve class
 - [x] Long test run script
 - [x] Change cabling
-- [ ] Extend script to oven pump
+- [x] Extend script to oven pump
 - [ ] Long test run script
 - [x] Change cabling
 - [ ] Extend logger to log differently in file and on screen
-- [ ] Build Electro Warm Water (eww) script <- needs mix valve class 
+- [ ] ~~Build Electro Warm Water (eww) script <- needs mix valve class~~
+- [ ] Extend oww with Electro Warm Water (eww) script <- needs mix valve class
 - [ ] Long test run script
 - [ ] ...
