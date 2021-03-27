@@ -206,6 +206,7 @@ private:
     Log::Warning("initialize mixer: " + to_string(fullCycleSec) + "s");
     digitalWrite(openPin, HIGH);
     digitalWrite(closePin, LOW);
+    std::cout << steps;
     for (int i = 0; i < steps; i++) {
       std::this_thread::sleep_for(std::chrono::milliseconds(stepTime));
       std::cout << (100 / steps * i + "% ");
