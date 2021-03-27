@@ -209,7 +209,7 @@ private:
     Log::Warning("initialized pin: " + to_string(closePin));
     std::cout << "log";
     // actually initialize
-    Log::Warning("initialize mixer: " + to_string(fullCycleSec) + "s");
+    //Log::Warning("initialize mixer: " + to_string(fullCycleSec) + "s");
     std::cout << "log";
     digitalWrite(openPin, HIGH);
     std::cout << "set openpin";
