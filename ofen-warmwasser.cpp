@@ -195,14 +195,19 @@ private:
   
   void initialize() {
     wiringPiSetup();
+    std::cout << "setup";
     pinMode(openPin, OUTPUT);
+    std::cout << "pinmode";
     digitalWrite(openPin, HIGH);
+    std::cout << "set openpin";
     Log::Warning("initialized pin: " + to_string(openPin));
-    wiringPiSetup();
+    std::cout << "log";
     pinMode(closePin, OUTPUT);
+    std::cout << "pinmod";
     digitalWrite(closePin, HIGH);
+    std::cout << "setclosepin";
     Log::Warning("initialized pin: " + to_string(closePin));
-    
+    std::cout << "log";
     // actually initialize
     Log::Warning("initialize mixer: " + to_string(fullCycleSec) + "s");
     digitalWrite(openPin, HIGH);
