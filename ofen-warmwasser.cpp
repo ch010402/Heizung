@@ -88,7 +88,7 @@ class valve {
         return;
       }
       digitalWrite(pin, HIGH);
-      delay(10*1000);
+      std::this_thread::sleep_for(std::chrono::milliseconds(10 * 1000));
       Log::Info("Ventil geschlossen");
       oldStatus = newStatus;
     }
@@ -175,7 +175,7 @@ int main(int argc, const char** argv) {
   while (true)
   { 
     // set TRUE for productive system otherwise it will run on the test system
-    if (false) {
+    if (true) {
       Log::Debug("running on productive system");
       orl = ofenRuecklauf.temperatur();
       bu = boilerUnten.temperatur();
