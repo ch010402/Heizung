@@ -297,7 +297,8 @@ bool checkNiederTarif() {
     return false;
     Log::Debug("Hochtarif " + hour);
   }
-};
+  return false;
+}
 
 int main(int argc, const char** argv) {
 
