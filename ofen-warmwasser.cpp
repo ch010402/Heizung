@@ -307,7 +307,8 @@ int main(int argc, const char** argv) {
   Log::Warning("starting up ... ");
   
   std::cout << "argv-1 " << argv[1] << std::endl;
-  if (argv[1] == "sommer") std::cout << "ja sommer baby" << std::endl;
+  std::string test = argv[1];
+  if (test.compare("sommer") == 0) std::cout << "ja sommer baby" << std::endl;
   else std::cout << "brr winter";
 
   // setup
