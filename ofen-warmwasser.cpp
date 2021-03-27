@@ -195,33 +195,17 @@ private:
   
   void initialize() {
     wiringPiSetup();
-    std::cout << "setup";
     pinMode(openPin, OUTPUT);
-    std::cout << "pinmode";
     digitalWrite(openPin, HIGH);
-    std::cout << "set openpin";
     Log::Warning("initialized pin: " + to_string(openPin));
-    std::cout << "log";
     pinMode(closePin, OUTPUT);
-    std::cout << "pinmod";
     digitalWrite(closePin, HIGH);
-    std::cout << "setclosepin";
     Log::Warning("initialized pin: " + to_string(closePin));
-    std::cout << "log";
     // actually initialize
-    //Log::Warning("initialize mixer: " + to_string(fullCycleSec) + "s");
-    std::cout << "log";
+    Log::Warning("initialize mixer: " + to_string(fullCycleSec) + "s");
     digitalWrite(openPin, HIGH);
-    std::cout << "set openpin";
     digitalWrite(closePin, LOW);
-    std::cout << "set setclose";
-    std::cout << steps;
-    for (int i = 0; i < steps; i++) {
-      std::cout << "for loop";
-      std::this_thread::sleep_for(std::chrono::milliseconds(stepTime));
-      std::cout << (100 / steps * i + "% ");
-    }
-    std::cout << endl;
+    std::this_thread::sleep_for(std::chrono::milliseconds(stepTime*steps));
     digitalWrite(closePin, HIGH);
     Log::Warning("initialize mixer: done");
     currentStep = 0;
