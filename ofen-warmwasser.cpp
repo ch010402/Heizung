@@ -198,6 +198,7 @@ private:
     pinMode(openPin, OUTPUT);
     digitalWrite(openPin, HIGH);
     Log::Warning("initialized pin: " + to_string(openPin));
+    wiringPiSetup();
     pinMode(closePin, OUTPUT);
     digitalWrite(closePin, HIGH);
     Log::Warning("initialized pin: " + to_string(closePin));
