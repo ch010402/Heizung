@@ -167,7 +167,7 @@ public:
       currentStep++;
       Log::Debug("current step: "+ currentStep);
     }
-    else Log::Warning("unable to open mixer");
+    else Log::Debug("unable to open mixer");
   }
   void close() {
     // check if initialized
@@ -180,7 +180,7 @@ public:
       currentStep++;
       Log::Debug("current step: " + currentStep);
     }
-    else Log::Warning("unable to close mixer");
+    else Log::Debug("unable to close mixer");
   }
   int mixStep() {
     if (!initialized) initialize();
