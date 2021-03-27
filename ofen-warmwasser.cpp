@@ -306,10 +306,15 @@ int main(int argc, const char** argv) {
   Log::Setup(argv[0], Log::Level::LevelInfo);
   Log::Warning("starting up ... ");
   
-  std::cout << "argv-1 " << argv[1] << std::endl;
-  std::string test = argv[1];
-  if (test.compare("sommer") == 0) std::cout << "ja sommer baby" << std::endl;
-  else std::cout << "brr winter";
+  bool winterbetrieb = true;
+  std::string winter = argv[1];
+  if (winter.compare("sommer") == 0) {
+    winterbetrieb = false;
+    Log::Warning("Sommerbetrieb gestartet");
+  }
+  else {
+    Log::Warning("Winterbetrieb gestartet");
+  }
 
   // setup
   pump boilerpumpe(28);
@@ -329,9 +334,7 @@ int main(int argc, const char** argv) {
 
   float orl;
   float bu;
-  
-  bool winterbetrieb = true;
-  
+    
   if (winterbetrieb) {
     speichervalve.open();
     umlaufpumpe.on();
