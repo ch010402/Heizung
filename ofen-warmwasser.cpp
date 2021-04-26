@@ -405,6 +405,8 @@ int main(int argc, const char** argv) {
         durchlauferhitzer.on();
         elektropumpe.on();
         boilervalve.open();
+        // wenn elektro Rücklauf > 45° schalte Boiler Pumpe ein
+        if (elektroRuecklauf.temperatur() > 45) boilerpumpe.on();
       }
       // beende aufheizen
       else {
@@ -417,8 +419,7 @@ int main(int argc, const char** argv) {
           elektromixer.close();
         }
       }
-      // wenn elektro Rücklauf > 45° schalte Boiler Pumpe ein
-      if (elektroRuecklauf.temperatur() > 45) boilerpumpe.on();
+      
       // wenn der elektro Rücklauf < 60° schliesse den Mixer um einen schritt
       if (elektroRuecklauf.temperatur() < 60) {
         elektromixer.close();
