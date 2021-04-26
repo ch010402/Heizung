@@ -159,13 +159,14 @@ public:
   // methodes
   void open() {
     if (!initialized) initialize();
-    if (currentStep < 8) {
+    if (currentStep < steps) {
       digitalWrite(closePin, HIGH);
       digitalWrite(openPin, LOW);
       std::this_thread::sleep_for(std::chrono::milliseconds(stepTime));
       digitalWrite(openPin, HIGH);
       currentStep++;
-      Log::Debug("current step: "+ currentStep);
+      //Log::Debug("current step: "+ to_string(currentStep));
+      Log::Debug("step time: "+ to_string(stepTime));
     }
     else Log::Debug("unable to open mixer");
   }
@@ -178,7 +179,7 @@ public:
       std::this_thread::sleep_for(std::chrono::milliseconds(stepTime));
       digitalWrite(closePin, HIGH);
       currentStep++;
-      Log::Debug("current step: " + currentStep);
+      Log::Debug("current step: " + to_string(currentStep));
     }
     else Log::Debug("unable to close mixer");
   }
@@ -190,7 +191,7 @@ private:
   bool initialized = false; // default false
   bool oldStatus = false; // false = off true = on; default false as initialized
   int steps = 16;
-  int stepTime = fullCycleSec * 1000 / steps;
+  int stepTime = fullCycleSec * 1000 / steps; // 82 * 1000 / 16 = 82000 / 16
   int currentStep; //
   
   void initialize() {
@@ -203,6 +204,7 @@ private:
     Log::Warning("initialized pin: " + to_string(closePin));
     // actually initialize
     Log::Warning("initialize mixer: " + to_string(fullCycleSec) + "s");
+    Log::Warning("step size in ms: " + to_string(stepTime) + "ms");
     digitalWrite(openPin, HIGH);
     digitalWrite(closePin, LOW);
     std::this_thread::sleep_for(std::chrono::milliseconds(fullCycleSec*1000));
@@ -298,7 +300,7 @@ bool checkNiederTarif() {
 
 int main(int argc, const char** argv) {
 
-  Log::Setup(argv[0], Log::Level::LevelInfo);
+  Log::Setup(argv[0], Log::Level::Debug);
   Log::Warning("starting up ... ");
   
   bool winterbetrieb = true;
