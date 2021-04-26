@@ -162,7 +162,7 @@ public:
     if (currentStep < steps) {
       digitalWrite(closePin, HIGH);
       digitalWrite(openPin, LOW);
-      std::this_thread::sleep_for(std::chrono::milliseconds(stepTime));
+      std::this_thread::sleep_for(std::chrono::milliseconds(fullCycleSec * 1000 / steps));
       digitalWrite(openPin, HIGH);
       currentStep++;
       //Log::Debug("current step: "+ to_string(currentStep));
@@ -176,7 +176,7 @@ public:
     if (currentStep > 0) {
       digitalWrite(openPin, HIGH);
       digitalWrite(closePin, LOW);
-      std::this_thread::sleep_for(std::chrono::milliseconds(stepTime));
+      std::this_thread::sleep_for(std::chrono::milliseconds(fullCycleSec * 1000 / steps));
       digitalWrite(closePin, HIGH);
       currentStep++;
       Log::Debug("current step: " + to_string(currentStep));
@@ -191,7 +191,7 @@ private:
   bool initialized = false; // default false
   bool oldStatus = false; // false = off true = on; default false as initialized
   int steps = 16;
-  int stepTime = fullCycleSec * 1000 / steps; // 82 * 1000 / 16 = 82000 / 16
+  //int stepTime = fullCycleSec * 1000 / steps; // 82 * 1000 / 16 = 82000 / 16
   int currentStep; //
   
   void initialize() {
@@ -208,7 +208,7 @@ private:
     digitalWrite(closePin, LOW);
     std::this_thread::sleep_for(std::chrono::milliseconds(fullCycleSec*1000));
     digitalWrite(closePin, HIGH);
-    Log::Warning("step size in ms: " + to_string(stepTime) + "ms");
+    Log::Warning("step size in ms: " + to_string(fullCycleSec * 1000 / steps) + "ms");
     Log::Warning("initialize mixer: done");
     currentStep = 0;
     Log::Warning("current step: " + to_string(currentStep));
