@@ -189,7 +189,7 @@ public:
 private:
   bool initialized = false; // default false
   bool oldStatus = false; // false = off true = on; default false as initialized
-  int steps = 8;
+  int steps = 16;
   int stepTime = fullCycleSec * 1000 / steps;
   int currentStep; //
   
