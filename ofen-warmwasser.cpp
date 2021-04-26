@@ -204,13 +204,14 @@ private:
     Log::Warning("initialized pin: " + to_string(closePin));
     // actually initialize
     Log::Warning("initialize mixer: " + to_string(fullCycleSec) + "s");
-    Log::Warning("step size in ms: " + to_string(stepTime) + "ms");
     digitalWrite(openPin, HIGH);
     digitalWrite(closePin, LOW);
     std::this_thread::sleep_for(std::chrono::milliseconds(fullCycleSec*1000));
     digitalWrite(closePin, HIGH);
+    Log::Warning("step size in ms: " + to_string(stepTime) + "ms");
     Log::Warning("initialize mixer: done");
     currentStep = 0;
+    Log::Warning("current step: " + to_string(currentStep));
     // done
     initialized = true;
   }
@@ -300,7 +301,7 @@ bool checkNiederTarif() {
 
 int main(int argc, const char** argv) {
 
-  Log::Setup(argv[0], Log::Level::Debug);
+  Log::Setup(argv[0], Log::Level::LevelInfo);
   Log::Warning("starting up ... ");
   
   bool winterbetrieb = true;
