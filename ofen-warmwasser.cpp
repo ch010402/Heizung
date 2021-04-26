@@ -166,7 +166,7 @@ public:
       digitalWrite(openPin, HIGH);
       currentStep++;
       //Log::Debug("current step: "+ to_string(currentStep));
-      Log::Debug("step time: "+ to_string(stepTime));
+      Log::Debug("step time: "+ to_string(fullCycleSec * 1000 / steps));
     }
     else Log::Debug("unable to open mixer");
   }
