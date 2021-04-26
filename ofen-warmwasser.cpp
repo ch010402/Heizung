@@ -37,7 +37,7 @@ class pump {
         return;
       }
       digitalWrite(pin, LOW);
-      Log::Info("Pumpe eingeschaltet");
+      Log::Info("Pumpe eingeschaltet" + to_string(pin));
       oldStatus = newStatus;
     }
     void off() {
@@ -48,7 +48,7 @@ class pump {
         return;
       }
       digitalWrite(pin, HIGH);
-      Log::Info("Pumpe ausgeschaltet");
+      Log::Info("Pumpe ausgeschaltet" + to_string(pin));
       oldStatus = newStatus;
     }
     private:
