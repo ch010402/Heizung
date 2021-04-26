@@ -267,8 +267,8 @@ temperaturSensor::temperaturSensor(string str) {
 
 //----- methodes
 bool checkNiederTarif() {
-  int morgen = 7;
-  int abend = 20;
+  int morgen = 6; // ACHTUNG UTC
+  int abend = 19; // ACHTUNG UTC
   int hour;
   auto now = std::chrono::system_clock::now();
   std::time_t in_time_t = std::chrono::system_clock::to_time_t(now);
