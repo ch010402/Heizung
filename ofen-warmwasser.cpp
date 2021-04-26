@@ -149,7 +149,7 @@ class mixer {
 public:
   int openPin;
   int closePin;
-  int fullCycleSec = 10;
+  int fullCycleSec;
   // constructor
   mixer(int open, int close, int sec) {
     openPin = open;
