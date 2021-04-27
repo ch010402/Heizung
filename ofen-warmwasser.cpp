@@ -303,6 +303,7 @@ bool checkNiederTarif() {
 
 int main(int argc, const char** argv) {
 
+// SET LogLevel HERE LevelError, LevelWarning, LevelInfo, Debug
   Log::Setup(argv[0], Log::Level::Debug);
   Log::Warning("starting up ... ");
   
@@ -357,7 +358,7 @@ int main(int argc, const char** argv) {
       // wenn der Boiler unten unter 70°C hat prüfe weiter
       if (bu < 70) {
         // wenn der Ofenrücklauf 5°C oder wärmer ist als der Boiler schalte ein
-        Log::Debug("Ofen Rücklauf " + to_string(orl) + " °C - Boiler unten " + to_string(bu) + "°C");
+        Log::Debug("Ofen Ruecklauf " + to_string(orl) + " °C - Boiler unten " + to_string(bu) + "°C");
         if (orl - 5 > bu) {
           boilervalve.open();
           boilerpumpe.on();
