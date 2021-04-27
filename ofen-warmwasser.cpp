@@ -438,7 +438,7 @@ int main(int argc, const char** argv) {
       // Ueberwache Durchlauferhitzer
       if (elektroRuecklauf.temperatur() > 96.5) {
         durchlauferhitzer.off();
-        Log::Warning("Schalte Durchlauferhitzer aus temperatur > 70° aktuell " + to_string(elektroRuecklauf.temperatur());
+        Log::Warning("Schalte Durchlauferhitzer aus temperatur > 70° aktuell " + to_string(elektroRuecklauf.temperatur()));
       }
       else if (elektroRuecklauf.temperatur() <= 65.0) {
         durchlauferhitzer.on();
