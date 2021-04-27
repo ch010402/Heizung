@@ -159,7 +159,7 @@ public:
   // methodes
   void open() {
     if (!initialized) initialize();
-    if (currentStep <= steps) {
+    if (currentStep <= steps - 1) {
       Log::Info("oeffne Mixer");
       digitalWrite(closePin, HIGH);
       digitalWrite(openPin, LOW);
@@ -173,7 +173,7 @@ public:
   void close() {
     // check if initialized
     if (!initialized) initialize();
-    if (currentStep >= 0) {
+    if (currentStep >= 1) {
       Log::Info("schliesse Mixer");
       digitalWrite(openPin, HIGH);
       digitalWrite(closePin, LOW);
@@ -289,11 +289,11 @@ bool checkNiederTarif() {
   ss << std::put_time(&buffer, "%H");
   ss >> hour;
   if (hour < morgen || hour >= abend) {
-    Log::Debug("Es ist Niedertarif. Stunde: " + hour);
+    Log::Debug("Es ist Niedertarif. Stunde: " + to_string(hour));
     return true;
   }
   else {
-    Log::Debug("Es ist Hochtarif. Stunde: " + hour);
+    Log::Debug("Es ist Hochtarif. Stunde: " + to_string(hour));
     return false;
   }
   Log::Error("Fehler beim bestimmen der Zeit");
@@ -432,10 +432,11 @@ int main(int argc, const char** argv) {
         durchlauferhitzer.off();
         Log::Warning("Schalte Durchlauferhitzer aus temperatur > 70°");
       }
-      else {
+      else if (elektroRuecklauf.temperatur() <= 65) {
         durchlauferhitzer.on();
         Log::Debug("Durchlauferhitzer ein");
       }
+      else Log::Debug("Kuehle Durchlauferhitzer");
       // wenn der Boiler unten unter 60° starte abschalten
       if (boilerUnten.temperatur() > 60) aufheizenAus = true;
       // beende Aufheizen
