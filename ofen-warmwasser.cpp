@@ -305,7 +305,7 @@ bool checkNiederTarif() {
 int main(int argc, const char** argv) {
 
 // SET LogLevel HERE LevelError, LevelWarning, LevelInfo, Debug
-  Log::Setup(argv[0], Log::Level::Debug);
+  Log::Setup(argv[0], Log::Level::LevelInfo);
   Log::Warning("starting up ... ");
   
   bool winterbetrieb = true;
@@ -400,7 +400,7 @@ int main(int argc, const char** argv) {
     // loop
     while (true) {
       // wenn der Boiler unten unter 30° prüfe ob niedertarif 
-      if (boilerUnten.temperatur() < 30) {
+      if (boilerUnten.temperatur() < 30.0) {
         Log::Debug("Boiler unten Temperatur unter 30°");
         if (checkNiederTarif()) {
           Log::Info("Niedertarif aktiv schalte ein");
@@ -413,32 +413,32 @@ int main(int argc, const char** argv) {
       }
       // starte Aufheizen
       if (aufheizenEin) {
-        durchlauferhitzer.on();
-        Log::Info("Schalte Durchlauferhitzer ein");
         elektropumpe.on();
         Log::Info("Schalte Elektropumpe ein");
+        durchlauferhitzer.on();
+        Log::Info("Schalte Durchlauferhitzer ein");
         aufheizenEin = false;
         Log::Debug("Aufheizen EIN beendet");
       }
       // Schalte Boiler Kreis ein 
-      if (elektroRuecklauf.temperatur() > 45) {
+      if (elektroRuecklauf.temperatur() > 45.0) {
         boilervalve.open();
         Log::Info("Oeffne Boilerventil");
         boilerpumpe.on();
         Log::Info("Schalte Boilerpumpe ein");
       }
       // Ueberwache Durchlauferhitzer
-      if (elektroRuecklauf.temperatur() > 70) {
+      if (elektroRuecklauf.temperatur() > 96.5) {
         durchlauferhitzer.off();
-        Log::Warning("Schalte Durchlauferhitzer aus temperatur > 70°");
+        Log::Warning("Schalte Durchlauferhitzer aus temperatur > 70° aktuell " + to_string(elektroRuecklauf.temperatur());
       }
-      else if (elektroRuecklauf.temperatur() <= 65) {
+      else if (elektroRuecklauf.temperatur() <= 65.0) {
         durchlauferhitzer.on();
         Log::Debug("Durchlauferhitzer ein");
       }
       else Log::Debug("Kuehle Durchlauferhitzer");
       // wenn der Boiler unten unter 60° starte abschalten
-      if (boilerUnten.temperatur() > 60) aufheizenAus = true;
+      if (boilerUnten.temperatur() > 60.0) aufheizenAus = true;
       // beende Aufheizen
       if (aufheizenAus) {
         durchlauferhitzer.off();
@@ -461,7 +461,7 @@ int main(int argc, const char** argv) {
         Log::Debug("Aufheizen AUS beendet");
       }
       // wenn der elektro Rücklauf > 60° öffne den Mixer um einen schritt
-      if (elektroRuecklauf.temperatur() > 60) {
+      if (elektroRuecklauf.temperatur() > 60.0) {
         elektromixer.open();
         Log::Debug("oeffne Mischer");
       }
