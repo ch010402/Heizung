@@ -270,8 +270,8 @@ temperaturSensor::temperaturSensor(string str) {
 
 //----- methodes
 bool checkNiederTarif() {
-  int morgen = 6; // ACHTUNG UTC
-  int abend = 19; // ACHTUNG UTC
+  int morgen = 6; // ACHTUNG UTC in CET wäre es 7
+  int abend = 19; // ACHTUNG UTC in CET wäre es 20
   int hour;
   auto now = std::chrono::system_clock::now();
   std::time_t in_time_t = std::chrono::system_clock::to_time_t(now);
@@ -288,11 +288,11 @@ bool checkNiederTarif() {
   ss << std::put_time(&buffer, "%H");
   ss >> hour;
   if (hour < morgen || hour > abend) {
-    Log::Debug("Niedertarif " + hour);
+    Log::Debug("Es ist Niedertarif. Stunde: " + hour);
     return true;
   }
   else {
-    Log::Debug("Hochtarif " + hour);
+    Log::Debug("Es ist Hochtarif. Stunde: " + hour);
     return false;
   }
   Log::Error("Fehler beim bestimmen der Zeit");
