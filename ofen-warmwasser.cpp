@@ -191,9 +191,8 @@ private:
   bool initialized = false; // default false
   bool oldStatus = false; // false = off true = on; default false as initialized
   int steps = 16;
-  //int stepTime = fullCycleSec * 1000 / steps; // 82 * 1000 / 16 = 82000 / 16
   int currentStep; //
-  
+
   void initialize() {
     wiringPiSetup();
     pinMode(openPin, OUTPUT);
@@ -301,7 +300,7 @@ bool checkNiederTarif() {
 
 int main(int argc, const char** argv) {
 
-  Log::Setup(argv[0], Log::Level::LevelInfo);
+  Log::Setup(argv[0], Log::Level::Debug);
   Log::Warning("starting up ... ");
   
   bool winterbetrieb = true;
@@ -390,7 +389,7 @@ int main(int argc, const char** argv) {
     // loop
     while (true) {
       // wenn der Boiler unten unter 30° prüfe ob niedertarif
-      if (boilerUnten.temperatur() < 30) {
+      if (boilerUnten.temperatur() < 35) {
         if (checkNiederTarif()) {
           Log::Warning("schalte Aufheizen ein");
           aufheizen = true;
