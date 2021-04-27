@@ -5,6 +5,7 @@ created: ch010402 16.10.2020
 changed: 
   ch010402 23.11.2020 mixup pump and valve IO corrected
   ch010402 27.03.2021 ready for real run
+  ch010402 27.04.2021 clean up and fix while summer full test 
 */
 
 #include "wiringPi.h" // library to access the GPIO Pins on a raspberryPI !!depriciated!!
@@ -22,90 +23,93 @@ using namespace std;
 
 //----- classes
 class pump {
-  public:
-    int pin;
-    // constructor
-    pump(int p) {
-      pin = p;
-    }
-    // methodes
-    void on() {
-      bool newStatus = true;
-      if (!initialized) initialize();
-      if (newStatus == oldStatus) {
-        Log::Debug("Pumpe bereits eingeschaltet");
-        return;
-      }
+public:
+  int pin;
+  // constructor
+  pump(int p) {
+    pin = p;
+  }
+  // methodes
+  // Schlatet die Pumpe an (void) eg. pump.on()
+  void on() {
+    bool newStatus = true; // true = on
+    if (!initialized) initialize();
+    if (newStatus != oldStatus) {
       digitalWrite(pin, LOW);
-      Log::Info("Pumpe eingeschaltet" + to_string(pin));
+      Log::Info("Pumpe eingeschaltet #" + std::to_string(pin));
       oldStatus = newStatus;
     }
-    void off() {
-      bool newStatus = false;
-      if (!initialized) initialize();
-      if (newStatus == oldStatus) {
-        Log::Debug("Pumpe bereits ausgeschaltet");
-        return;
-      }
+    else Log::Debug("Pumpe bereits eingeschaltet");
+  }
+  // Schaltet die Pumpe aus (void) eg. pump.off()
+  void off() {
+    bool newStatus = false; // false = off
+    if (!initialized) initialize();
+    if (newStatus != oldStatus) {
       digitalWrite(pin, HIGH);
-      Log::Info("Pumpe ausgeschaltet" + to_string(pin));
+      Log::Info("Pumpe ausgeschaltet #" + std::to_string(pin));
       oldStatus = newStatus;
     }
-    private:
-      bool initialized = false; // default false 
-      bool oldStatus = false; // false = off true = on; default false as initialized
-      void initialize() {
-        wiringPiSetup();
-        pinMode(pin,OUTPUT);
-        digitalWrite(pin, HIGH);
-        Log::Warning("Initialisiere Pupmen pin: " + to_string(pin));
-        initialized = true;
-      }
+    else Log::Debug("Pumpe bereits ausgeschaltet");
+  }
+private:
+  bool initialized = false; // default false -> not initialized
+  bool oldStatus; // false = off true = on; default false as initialized
+  // Initialisiere Pumpen pin
+  void initialize() {
+    wiringPiSetup();
+    pinMode(pin, OUTPUT);
+    digitalWrite(pin, HIGH); // setze den Pin statndard auf HIGH = Aus
+    Log::Warning("Initialisiere Pupmen pin: " + std::to_string(pin));
+    oldStatus = false;
+    initialized = true;
+  }
 };
 
 class valve {
-  public:
-    int pin;
-    // constructor
-    valve(int v){
-      pin = v;
-    }
-    // methodes
-    void open() {
-      bool newStatus = true;
-      if (!initialized) initialize();
-      if (newStatus == oldStatus) {
-        Log::Debug("Ventil bereits geoeffnet");
-        return;
-      }
+public:
+  int pin;
+  // constructor
+  valve(int v) {
+    pin = v;
+  }
+  // methodes
+  // Oeffnet das Ventil (void) eg. valve.open()
+  void open() {
+    bool newStatus = true; // ture = open
+    if (!initialized) initialize();
+    if (newStatus != oldStatus) {
       digitalWrite(pin, LOW);
       // Ventil öffnung 30s
-      delay(15*1000);
-      Log::Info("Ventil geoeffnet");
+      std::this_thread::sleep_for(std::chrono::milliseconds(15 * 1000));
+      Log::Info("Ventil geoeffnet #" + std::to_string(pin));
       oldStatus = newStatus;
     }
-    void close() {
-      bool newStatus = false;
-      if (!initialized) initialize();
-      if (newStatus == oldStatus) {
-        Log::Debug("Ventil bereits geschlossen");
-        return;
-      }
+    else Log::Debug("Ventil bereits geoeffnet");
+  }
+  // Schliesst das Ventil (void) eg. valve.close()
+  void close() {
+    bool newStatus = false; // false = close
+    if (!initialized) initialize();
+    if (newStatus != oldStatus) {
       digitalWrite(pin, HIGH);
       std::this_thread::sleep_for(std::chrono::milliseconds(10 * 1000));
-      Log::Info("Ventil geschlossen");
+      Log::Info("Ventil geschlossen #" + std::to_string(pin));
       oldStatus = newStatus;
     }
-  private:
-    bool initialized = false; // default false 
-    bool oldStatus = false; // false = off true = on; default false as initialized
-    void initialize() {
-      wiringPiSetup();
-      pinMode(pin,OUTPUT);
-      digitalWrite(pin, HIGH);
-      Log::Warning("Initialisire Ventil pin: " + to_string(pin));
-      initialized = true;
-    }
+    else Log::Debug("Ventil bereits geschlossen");
+  }
+private:
+  bool initialized = false; // default false 
+  bool oldStatus; // false = off true = on; default false as initialized
+  void initialize() {
+    wiringPiSetup();
+    pinMode(pin, OUTPUT);
+    digitalWrite(pin, HIGH);
+    Log::Warning("Initialisire Ventil pin: " + std::to_string(pin));
+    oldStatus = false;
+    initialized = true;
+  }
 };
 
 class temperaturSensor {
@@ -157,62 +161,66 @@ public:
     fullCycleSec = sec;
   }
   // methodes
+  // Öffne den Mischer (void) eg. mixer.open()
   void open() {
     if (!initialized) initialize();
     if (currentStep <= steps - 1) {
-      Log::Info("oeffne Mixer");
       digitalWrite(closePin, HIGH);
       digitalWrite(openPin, LOW);
       std::this_thread::sleep_for(std::chrono::milliseconds(fullCycleSec * 1000 / steps));
       digitalWrite(openPin, HIGH);
       currentStep++;
-      Log::Debug("setze current step auf : "+ to_string(currentStep));
+      Log::Debug("oeffne Mischer auf current step : " + std::to_string(currentStep));
     }
-    else Log::Debug("unable to open mixer");
+    else Log::Debug("Mischer bereits voll geoeffnet");
   }
+  // Schliesse den Mischer (void) eg. mixer.close()
   void close() {
-    // check if initialized
     if (!initialized) initialize();
     if (currentStep >= 1) {
-      Log::Info("schliesse Mixer");
       digitalWrite(openPin, HIGH);
       digitalWrite(closePin, LOW);
       std::this_thread::sleep_for(std::chrono::milliseconds(fullCycleSec * 1000 / steps));
       digitalWrite(closePin, HIGH);
       currentStep--;
-      Log::Debug("setze current step auf : " + to_string(currentStep));
+      Log::Debug("schliesse Mischer auf current step : " + std::to_string(currentStep));
     }
-    else Log::Debug("unable to close mixer");
+    else Log::Debug("Mischer bereits voll geschlossen");
   }
+  // gibt den aktuellen step zurück eg. mixer.mixStep() --> 5
   int mixStep() {
     if (!initialized) initialize();
+    Log::Debug("Mischer auf current step : " + std::to_string(currentStep));
     return currentStep;
   }
 private:
   bool initialized = false; // default false
-  bool oldStatus = false; // false = off true = on; default false as initialized
   int steps = 16;
-  int currentStep; //
+  int currentStep;
 
   void initialize() {
     wiringPiSetup();
     pinMode(openPin, OUTPUT);
-    digitalWrite(openPin, HIGH);
-    Log::Info("Initialisiere Open pin: " + to_string(openPin));
+    digitalWrite(openPin, HIGH); // setze den Pin statndard auf HIGH = Aus
+    Log::Warning("Initialisiere Open pin: " + std::to_string(openPin));
     pinMode(closePin, OUTPUT);
-    digitalWrite(closePin, HIGH);
-    Log::Info("Initialisiere Close pin: " + to_string(closePin));
-    // actually initialize
-    Log::Info("Setze volle Zykluszeit auf: " + to_string(fullCycleSec) + "s");
-    Log::Info("Schritt groesse in ms: " + to_string(fullCycleSec * 1000 / steps) + "ms");
+    digitalWrite(closePin, HIGH); // setze den Pin statndard auf HIGH = Aus
+    Log::Warning("Initialisiere Close pin: " + std::to_string(closePin));
+    Log::Info("Setze volle Zykluszeit auf: " + std::to_string(fullCycleSec) + "s");
+    Log::Info("Schritt groesse in ms: " + std::to_string(fullCycleSec * 1000 / steps) + "ms");
     Log::Warning("Starte die Initialisierung.");
+    // actually initialize
     digitalWrite(openPin, HIGH);
     digitalWrite(closePin, LOW);
-    std::this_thread::sleep_for(std::chrono::milliseconds(fullCycleSec*1000));
+    std::this_thread::sleep_for(std::chrono::milliseconds(fullCycleSec * 1000));
     digitalWrite(closePin, HIGH);
+    std::this_thread::sleep_for(std::chrono::milliseconds(200));
+    digitalWrite(openPin, LOW);
+    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+    digitalWrite(openPin, HIGH);
     Log::Warning("Initialisierung beendet.");
     currentStep = 0;
-    Log::Debug("setze currentStep auf: " + to_string(currentStep));
+    Log::Debug("setze currentStep auf: " + std::to_string(currentStep));
     initialized = true;
   }
 };
@@ -225,42 +233,43 @@ public:
     pin = p;
   }
   // methodes
+  // Schaltet einen I/O (void) eg. io.on()
   void on() {
-    bool newStatus = true;
+    bool newStatus = true; // ture = open
     if (!initialized) initialize();
-    if (newStatus == oldStatus) {
-      Log::Debug("I/O bereits eingeschaltet");
-      return;
+    if (newStatus != oldStatus) {
+      digitalWrite(pin, LOW);
+      Log::Info("I/O eingeschaltet #" + std::to_string(pin));
+      oldStatus = newStatus;
     }
-    digitalWrite(pin, LOW);
-    Log::Info("I/O eingeschaltet");
-    oldStatus = newStatus;
+    else Log::Debug("I/O bereits eingeschaltet");
   }
+  // Schaltet einen I/O (void) eg. io.off()
   void off() {
-    bool newStatus = false;
+    bool newStatus = false; // false = close
     if (!initialized) initialize();
-    if (newStatus == oldStatus) {
-      Log::Debug("I/O bereits ausgeschaltet");
-      return;
+    if (newStatus != oldStatus) {
+      digitalWrite(pin, HIGH);
+      Log::Info("I/O eingeschaltet #" + std::to_string(pin));
+      oldStatus = newStatus;
     }
-    digitalWrite(pin, HIGH);
-    Log::Info("I/O ausgeschaltet");
-    oldStatus = newStatus;
+    else Log::Debug("I/O bereits ausgeschaltet");
   }
 private:
   bool initialized = false; // default false 
-  bool oldStatus = false; // false = off true = on; default false as initialized
+  bool oldStatus; // false = off true = on; default false as initialized
   void initialize() {
     wiringPiSetup();
     pinMode(pin, OUTPUT);
     digitalWrite(pin, HIGH);
-    Log::Warning("Initialisiere I/O pin: " + to_string(pin));
+    Log::Warning("Initialisiere I/O pin: " + std::to_string(pin));
+    oldStatus = false;
     initialized = true;
   }
 };
 
 
-// constructor
+//----- constructor
 temperaturSensor::temperaturSensor(string str) {
   string device = str;
   const static string baseDir = "/sys/bus/w1/devices/";
@@ -301,7 +310,6 @@ bool checkNiederTarif() {
 }
 
 // ********** main **********
-
 int main(int argc, const char** argv) {
 
 // SET LogLevel HERE LevelError, LevelWarning, LevelInfo, Debug
