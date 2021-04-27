@@ -58,7 +58,7 @@ class pump {
         wiringPiSetup();
         pinMode(pin,OUTPUT);
         digitalWrite(pin, HIGH);
-        Log::Warning("initialized pin: " + to_string(pin));
+        Log::Warning("Initialisiere Pupmen pin: " + to_string(pin));
         initialized = true;
       }
 };
@@ -75,13 +75,13 @@ class valve {
       bool newStatus = true;
       if (!initialized) initialize();
       if (newStatus == oldStatus) {
-        Log::Debug("Ventil bereits geöffnet");
+        Log::Debug("Ventil bereits geoeffnet");
         return;
       }
       digitalWrite(pin, LOW);
       // Ventil öffnung 30s
       delay(15*1000);
-      Log::Info("Ventil geöffnet");
+      Log::Info("Ventil geoeffnet");
       oldStatus = newStatus;
     }
     void close() {
@@ -103,7 +103,7 @@ class valve {
       wiringPiSetup();
       pinMode(pin,OUTPUT);
       digitalWrite(pin, HIGH);
-      Log::Warning("initialized pin: " + to_string(pin));
+      Log::Warning("Initialisire Ventil pin: " + to_string(pin));
       initialized = true;
     }
 };
@@ -159,27 +159,28 @@ public:
   // methodes
   void open() {
     if (!initialized) initialize();
-    if (currentStep < steps) {
+    if (currentStep <= steps) {
+      Log::Info("oeffne Mixer");
       digitalWrite(closePin, HIGH);
       digitalWrite(openPin, LOW);
       std::this_thread::sleep_for(std::chrono::milliseconds(fullCycleSec * 1000 / steps));
       digitalWrite(openPin, HIGH);
       currentStep++;
-      //Log::Debug("current step: "+ to_string(currentStep));
-      Log::Debug("step time: "+ to_string(fullCycleSec * 1000 / steps));
+      Log::Debug("setze current step auf : "+ to_string(currentStep));
     }
     else Log::Debug("unable to open mixer");
   }
   void close() {
     // check if initialized
     if (!initialized) initialize();
-    if (currentStep > 0) {
+    if (currentStep >= 0) {
+      Log::Info("schliesse Mixer");
       digitalWrite(openPin, HIGH);
       digitalWrite(closePin, LOW);
       std::this_thread::sleep_for(std::chrono::milliseconds(fullCycleSec * 1000 / steps));
       digitalWrite(closePin, HIGH);
-      currentStep++;
-      Log::Debug("current step: " + to_string(currentStep));
+      currentStep--;
+      Log::Debug("setze current step auf : " + to_string(currentStep));
     }
     else Log::Debug("unable to close mixer");
   }
@@ -197,21 +198,21 @@ private:
     wiringPiSetup();
     pinMode(openPin, OUTPUT);
     digitalWrite(openPin, HIGH);
-    Log::Warning("initialized pin: " + to_string(openPin));
+    Log::Info("Initialisiere Open pin: " + to_string(openPin));
     pinMode(closePin, OUTPUT);
     digitalWrite(closePin, HIGH);
-    Log::Warning("initialized pin: " + to_string(closePin));
+    Log::Info("Initialisiere Close pin: " + to_string(closePin));
     // actually initialize
-    Log::Warning("initialize mixer: " + to_string(fullCycleSec) + "s");
+    Log::Info("Setze volle Zykluszeit auf: " + to_string(fullCycleSec) + "s");
+    Log::Info("Schritt groesse in ms: " + to_string(fullCycleSec * 1000 / steps) + "ms");
+    Log::Warning("Starte die Initialisierung.");
     digitalWrite(openPin, HIGH);
     digitalWrite(closePin, LOW);
     std::this_thread::sleep_for(std::chrono::milliseconds(fullCycleSec*1000));
     digitalWrite(closePin, HIGH);
-    Log::Warning("step size in ms: " + to_string(fullCycleSec * 1000 / steps) + "ms");
-    Log::Warning("initialize mixer: done");
+    Log::Warning("Initialisierung beendet.");
     currentStep = 0;
-    Log::Warning("current step: " + to_string(currentStep));
-    // done
+    Log::Debug("setze currentStep auf: " + to_string(currentStep));
     initialized = true;
   }
 };
@@ -228,22 +229,22 @@ public:
     bool newStatus = true;
     if (!initialized) initialize();
     if (newStatus == oldStatus) {
-      Log::Debug("Elektro bereits eingeschaltet");
+      Log::Debug("I/O bereits eingeschaltet");
       return;
     }
     digitalWrite(pin, LOW);
-    Log::Info("Elektro eingeschaltet");
+    Log::Info("I/O eingeschaltet");
     oldStatus = newStatus;
   }
   void off() {
     bool newStatus = false;
     if (!initialized) initialize();
     if (newStatus == oldStatus) {
-      Log::Debug("Elektro bereits ausgeschaltet");
+      Log::Debug("I/O bereits ausgeschaltet");
       return;
     }
     digitalWrite(pin, HIGH);
-    Log::Info("Elektro ausgeschaltet");
+    Log::Info("I/O ausgeschaltet");
     oldStatus = newStatus;
   }
 private:
@@ -253,7 +254,7 @@ private:
     wiringPiSetup();
     pinMode(pin, OUTPUT);
     digitalWrite(pin, HIGH);
-    Log::Warning("initialized pin: " + to_string(pin));
+    Log::Warning("Initialisiere I/O pin: " + to_string(pin));
     initialized = true;
   }
 };
@@ -297,6 +298,8 @@ bool checkNiederTarif() {
   Log::Error("Fehler beim bestimmen der Zeit");
   return false;
 }
+
+// ********** main **********
 
 int main(int argc, const char** argv) {
 
@@ -384,55 +387,88 @@ int main(int argc, const char** argv) {
   else { 
     speichervalve.close();
     umlaufpumpe.off();
-    bool aufheizen = false;
+    // reset
+    boilerpumpe.off();
+    boilervalve.close();
+    durchlauferhitzer.off();
+    elektropumpe.off();
+    bool aufheizenEin = false;
+    bool aufheizenAus = false;
 
     // loop
     while (true) {
-      // wenn der Boiler unten unter 30° prüfe ob niedertarif
-      if (boilerUnten.temperatur() < 35) {
+      // wenn der Boiler unten unter 30° prüfe ob niedertarif 
+      if (boilerUnten.temperatur() < 30) {
+        Log::Debug("Boiler unten Temperatur unter 30°");
         if (checkNiederTarif()) {
-          Log::Warning("schalte Aufheizen ein");
-          aufheizen = true;
+          Log::Info("Niedertarif aktiv schalte ein");
+          aufheizenEin = true;
         }
         else {
-          Log::Warning("schalte Aufheizen aus");
-          aufheizen = false;
+          Log::Debug("Hochtarif schalte aus");
+          aufheizenEin = false;
         }
       }
-      // starte aufheizen
-      if (aufheizen) {
+      // starte Aufheizen
+      if (aufheizenEin) {
         durchlauferhitzer.on();
+        Log::Info("Schalte Durchlauferhitzer ein");
         elektropumpe.on();
-        boilervalve.open();
-        // wenn elektro Rücklauf > 45° schalte Boiler Pumpe ein
-        if (elektroRuecklauf.temperatur() > 45) boilerpumpe.on();
+        Log::Info("Schalte Elektropumpe ein");
+        aufheizenEin = false;
+        Log::Debug("Aufheizen EIN beendet");
       }
-      // beende aufheizen
-      else {
+      // Schalte Boiler Kreis ein 
+      if (elektroRuecklauf.temperatur() > 45) {
+        boilervalve.open();
+        Log::Info("Oeffne Boilerventil");
+        boilerpumpe.on();
+        Log::Info("Schalte Boilerpumpe ein");
+      }
+      // Ueberwache Durchlauferhitzer
+      if (elektroRuecklauf.temperatur() > 70) {
         durchlauferhitzer.off();
+        Log::Warning("Schalte Durchlauferhitzer aus temperatur > 70°");
+      }
+      else {
+        durchlauferhitzer.on();
+        Log::Debug("Durchlauferhitzer ein");
+      }
+      // wenn der Boiler unten unter 60° starte abschalten
+      if (boilerUnten.temperatur() > 60) aufheizenAus = true;
+      // beende Aufheizen
+      if (aufheizenAus) {
+        durchlauferhitzer.off();
+        Log::Info("Schalte Durchlauferhitzer aus");
+        std::this_thread::sleep_for(std::chrono::milliseconds(120 * 1000));
         elektropumpe.off();
+        Log::Info("Schalte Elektropumpe aus");
         boilerpumpe.off();
+        Log::Info("Schalte Boilerpumpe aus");
         boilervalve.close();
+        Log::Info("Schliesse Boilerventil");
         // set mixer to 0
+        Log::Info("Elektromischer auf Schritt. " + to_string(elektromixer.mixStep()));
         for (int i = 0; i < elektromixer.mixStep(); i++) {
+          Log::Debug("Elektromischer auf Schritt. " + to_string(elektromixer.mixStep()));
+          Log::Debug("Durchlauf: " + to_string(i));
           elektromixer.close();
         }
+        aufheizenAus = false;
+        Log::Debug("Aufheizen AUS beendet");
       }
-      
+      // wenn der elektro Rücklauf > 60° öffne den Mixer um einen schritt
+      if (elektroRuecklauf.temperatur() > 60) {
+        elektromixer.open();
+        Log::Debug("oeffne Mischer");
+      }
       // wenn der elektro Rücklauf < 60° schliesse den Mixer um einen schritt
-      if (elektroRuecklauf.temperatur() < 60) {
+      else {
         elektromixer.close();
         Log::Debug("schliesse Mischer");
       }
-      // wenn der elektro Rücklauf > 60° öffne den Mixer um einen schritt
-      else {
-        elektromixer.open();
-        Log::Debug("öffne Mischer");
-      }
-      if (boilerUnten.temperatur() > 60) {
-        Log::Warning("schalte Aufheizen aus");
-        aufheizen = false;
-      }
+      
+      // schlafe für 5 Sekunden
       std::this_thread::sleep_for(std::chrono::milliseconds(5 * 1000));
     }
   }
