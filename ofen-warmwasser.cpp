@@ -394,64 +394,101 @@ int main(int argc, const char** argv) {
     }
   }
   // sommerbetrieb
-  else { 
+  else {
+    //build status 
+    enum class elektroStatus {
+      elektroAus = 0, elektroReady, elektroStart, elektroEin
+    };
+    elektroStatus status = elektroStatus::elektroAus;
+    // start up defaults
     speichervalve.close();
     umlaufpumpe.off();
-    // reset
+    // reset all i/o
     boilerpumpe.off();
     boilervalve.close();
     durchlauferhitzer.off();
     elektropumpe.off();
-    bool aufheizenEin = false;
-    bool aufheizenAus = false;
 
     // loop
     while (true) {
-      // wenn der Boiler unten unter 30° prüfe ob niedertarif 
-      if (boilerUnten.temperatur() < 30.0) {
-        Log::Info("Boiler unten Temperatur unter 30°");
-        if (checkNiederTarif()) {
-          Log::Info("Niedertarif aktiv schalte ein");
-          //aufheizenEin = true;
-        }
-        else {
-          Log::Debug("Hochtarif schalte aus");
-          aufheizenEin = false;
-        }
+      // prüfe Tarif
+      if (checkNiederTarif()) {
+        Log::Info("Niedertarif aktiv");
+        status = elektroStatus::elektroReady;
       }
-      // starte Aufheizen
-      if (aufheizenEin) {
+      else {
+        Log::Debug("Hochtarif warte");
+        status = elektroStatus::elektroAus;
+      }
+      if (status >= elektroStatus::elektroReady && boilerUnten.temperatur() < 30.0) {
+        Log::Info("Boiler unten Temperatur unter 30°");
+        status = elektroStatus::elektroStart;
+      }
+
+      // Starte Durchlauferhitzer
+      if (status == elektroStatus::elektroStart) {
         elektropumpe.on();
         Log::Info("Schalte Elektropumpe ein");
         durchlauferhitzer.on();
         Log::Info("Schalte Durchlauferhitzer ein");
-        aufheizenEin = false;
-        Log::Debug("Aufheizen EIN beendet");
+        status = elektroStatus::elektroEin;
       }
-      // Schalte Boiler Kreis ein 
-      if (elektroRuecklauf.temperatur() > 45.0) {
+      else {
+        if (status < elektroStatus::elektroStart) {
+          status = elektroStatus::elektroAus;
+          durchlauferhitzer.off();
+          Log::Info("Schalte Durchlauferhitzer aus");
+          std::this_thread::sleep_for(std::chrono::milliseconds(60 * 1000));
+          elektropumpe.off();
+          Log::Info("Schalte Elektropumpe aus");
+          boilerpumpe.off();
+          Log::Info("Schalte Boilerpumpe aus");
+          boilervalve.close();
+          Log::Info("Schliesse Boilerventil");
+          // set mixer to 0
+          Log::Info("Elektromischer auf Schritt. " + to_string(elektromixer.mixStep()));
+          for (int i = 0; i < elektromixer.mixStep(); i++) {
+            Log::Debug("Elektromischer auf Schritt. " + to_string(elektromixer.mixStep()));
+            Log::Debug("Durchlauf: " + to_string(i));
+            elektromixer.close();
+          }
+        }
+      }
+
+      // Schalte Boiler Kreis ein
+      if (status >= elektroStatus::elektroEin && elektroRuecklauf.temperatur() > 45.0) {
         boilervalve.open();
         Log::Info("Oeffne Boilerventil");
         boilerpumpe.on();
         Log::Info("Schalte Boilerpumpe ein");
       }
+      // Schalte Boiler Kreis aus
+      else {
+        boilerpumpe.off();
+        Log::Info("Schalte Boilerpumpe aus");
+        boilervalve.close();
+        Log::Info("Schliesse Boilerventil");
+      }
+
       // Ueberwache Durchlauferhitzer
-      if (elektroRuecklauf.temperatur() > 96.5) {
+      if (elektroRuecklauf.temperatur() > 69.0) {
         durchlauferhitzer.off();
         Log::Warning("Schalte Durchlauferhitzer aus temperatur > 70° aktuell " + to_string(elektroRuecklauf.temperatur()));
       }
-      else if (elektroRuecklauf.temperatur() <= 65.0) {
-        durchlauferhitzer.on();
-        Log::Debug("Durchlauferhitzer ein");
+      else {
+        if (status >= elektroStatus::elektroEin && elektroRuecklauf.temperatur() <= 65.0) {
+          durchlauferhitzer.on();
+          Log::Debug("Durchlauferhitzer ein");
+        }
+        else Log::Debug("Kuehle Durchlauferhitzer");
       }
-      else Log::Debug("Kuehle Durchlauferhitzer");
-      // wenn der Boiler unten unter 60° starte abschalten
-      if (boilerUnten.temperatur() > 60.0) aufheizenAus = true;
-      // beende Aufheizen
-      if (aufheizenAus) {
+
+      // Pruefe Boiler Temperatur
+      if (status >= elektroStatus::elektroReady && boilerUnten.temperatur() > 60.0) {
+        status = elektroStatus::elektroAus;
         durchlauferhitzer.off();
         Log::Info("Schalte Durchlauferhitzer aus");
-        std::this_thread::sleep_for(std::chrono::milliseconds(120 * 1000));
+        std::this_thread::sleep_for(std::chrono::milliseconds(60 * 1000));
         elektropumpe.off();
         Log::Info("Schalte Elektropumpe aus");
         boilerpumpe.off();
@@ -465,11 +502,10 @@ int main(int argc, const char** argv) {
           Log::Debug("Durchlauf: " + to_string(i));
           elektromixer.close();
         }
-        aufheizenAus = false;
-        Log::Debug("Aufheizen AUS beendet");
       }
+      
       // wenn der elektro Rücklauf > 60° öffne den Mixer um einen schritt
-      if (elektroRuecklauf.temperatur() > 60.0) {
+      if (status >= elektroStatus::elektroReady && elektroRuecklauf.temperatur() > 60.0) {
         elektromixer.open();
         Log::Debug("oeffne Mischer");
       }
@@ -478,7 +514,7 @@ int main(int argc, const char** argv) {
         elektromixer.close();
         Log::Debug("schliesse Mischer");
       }
-      
+     
       // schlafe für 5 Sekunden
       std::this_thread::sleep_for(std::chrono::milliseconds(5 * 1000));
     }
