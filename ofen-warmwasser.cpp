@@ -298,11 +298,11 @@ bool checkNiederTarif() {
   ss << std::put_time(&buffer, "%H");
   ss >> hour;
   if (hour < morgen || hour >= abend) {
-    Log::Debug("Es ist Niedertarif. Stunde: " + to_string(hour));
+    Log::Info("Es ist Niedertarif. Stunde: " + to_string(hour));
     return true;
   }
   else {
-    Log::Debug("Es ist Hochtarif. Stunde: " + to_string(hour));
+    Log::Info("Es ist Hochtarif. Stunde: " + to_string(hour));
     return false;
   }
   Log::Error("Fehler beim bestimmen der Zeit");
@@ -409,10 +409,10 @@ int main(int argc, const char** argv) {
     while (true) {
       // wenn der Boiler unten unter 30° prüfe ob niedertarif 
       if (boilerUnten.temperatur() < 30.0) {
-        Log::Debug("Boiler unten Temperatur unter 30°");
+        Log::Info("Boiler unten Temperatur unter 30°");
         if (checkNiederTarif()) {
           Log::Info("Niedertarif aktiv schalte ein");
-          aufheizenEin = true;
+          //aufheizenEin = true;
         }
         else {
           Log::Debug("Hochtarif schalte aus");
