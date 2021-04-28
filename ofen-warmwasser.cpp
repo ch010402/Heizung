@@ -434,7 +434,7 @@ int main(int argc, const char** argv) {
         status = elektroStatus::elektroEin;
       }
       else {
-        if (status < elektroStatus::elektroStart) {
+        if (!checkNiederTarif()) {
           status = elektroStatus::elektroAus;
           durchlauferhitzer.off();
           Log::Info("Schalte Durchlauferhitzer aus");
@@ -505,12 +505,12 @@ int main(int argc, const char** argv) {
       }
       
       // wenn der elektro Rücklauf > 60° öffne den Mixer um einen schritt
-      if (status >= elektroStatus::elektroReady && elektroRuecklauf.temperatur() > 60.0) {
+      if (status >= elektroStatus::elektroStart && elektroRuecklauf.temperatur() > 60.0) {
         elektromixer.open();
         Log::Debug("oeffne Mischer");
       }
       // wenn der elektro Rücklauf < 60° schliesse den Mixer um einen schritt
-      else {
+      if (status >= elektroStatus::elektroStart) {
         elektromixer.close();
         Log::Debug("schliesse Mischer");
       }
