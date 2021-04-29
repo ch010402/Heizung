@@ -413,17 +413,23 @@ int main(int argc, const char** argv) {
     while (true) {
       // prüfe Tarif
       if (checkNiederTarif()) {
-        Log::Info("Niedertarif aktiv");
-        status = elektroStatus::elektroReady;
+        if (status >= elektroStatus::elektroStart) {
+          Log::Info("Niedertarif aktiv ... heizen laeuft");
+        }
+        else {
+          Log::Info("Niedertarif aktiv ... starte aufheizen");
+          status = elektroStatus::elektroReady;
+        }
       }
       else {
         Log::Debug("Hochtarif warte");
         status = elektroStatus::elektroAus;
       }
-      if (status >= elektroStatus::elektroReady && boilerUnten.temperatur() < 30.0) {
+      if (status == elektroStatus::elektroReady && boilerUnten.temperatur() < 30.0) {
         Log::Info("Boiler unten Temperatur unter 30°");
         status = elektroStatus::elektroStart;
       }
+      else Log::Info("Boiler unten Temperatur unter "+ std::to_string(boilerUnten.temperatur()));
 
       // Starte Durchlauferhitzer
       if (status == elektroStatus::elektroStart) {
@@ -505,17 +511,18 @@ int main(int argc, const char** argv) {
       }
       
       // wenn der elektro Rücklauf > 60° öffne den Mixer um einen schritt
-      if (status >= elektroStatus::elektroStart && elektroRuecklauf.temperatur() > 60.0) {
+      if (status >= elektroStatus::elektroEin && elektroRuecklauf.temperatur() > 60.0) {
         elektromixer.open();
         Log::Debug("oeffne Mischer");
       }
       // wenn der elektro Rücklauf < 60° schliesse den Mixer um einen schritt
-      if (status >= elektroStatus::elektroStart) {
+      if (status >= elektroStatus::elektroEin && elektroRuecklauf.temperatur() < 60.0) {
         elektromixer.close();
         Log::Debug("schliesse Mischer");
       }
      
       // schlafe für 5 Sekunden
+      Log::Info("--- loop ende ---");
       std::this_thread::sleep_for(std::chrono::milliseconds(5 * 1000));
     }
   }
