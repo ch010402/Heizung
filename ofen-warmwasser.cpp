@@ -170,7 +170,7 @@ public:
       std::this_thread::sleep_for(std::chrono::milliseconds(fullCycleSec * 1000 / steps));
       digitalWrite(openPin, HIGH);
       currentStep++;
-      Log::Debug("oeffne Mischer auf current step : " + std::to_string(currentStep));
+      Log::Info("oeffne Mischer auf current step : " + std::to_string(currentStep));
     }
     else Log::Debug("Mischer bereits voll geoeffnet");
   }
@@ -183,7 +183,7 @@ public:
       std::this_thread::sleep_for(std::chrono::milliseconds(fullCycleSec * 1000 / steps));
       digitalWrite(closePin, HIGH);
       currentStep--;
-      Log::Debug("schliesse Mischer auf current step : " + std::to_string(currentStep));
+      Log::Info("schliesse Mischer auf current step : " + std::to_string(currentStep));
     }
     else Log::Debug("Mischer bereits voll geschlossen");
   }
@@ -250,7 +250,7 @@ public:
     if (!initialized) initialize();
     if (newStatus != oldStatus) {
       digitalWrite(pin, HIGH);
-      Log::Info("I/O eingeschaltet #" + std::to_string(pin));
+      Log::Info("I/O ausgeschaltet #" + std::to_string(pin));
       oldStatus = newStatus;
     }
     else Log::Debug("I/O bereits ausgeschaltet");
@@ -479,12 +479,12 @@ int main(int argc, const char** argv) {
       // Ueberwache Durchlauferhitzer
       if (elektroRuecklauf.temperatur() > 69.0) {
         durchlauferhitzer.off();
-        Log::Warning("Schalte Durchlauferhitzer aus temperatur > 70° aktuell " + to_string(elektroRuecklauf.temperatur()));
+        Log::Warning("Schalte Durchlauferhitzer aus temperatur > 69° aktuell " + to_string(elektroRuecklauf.temperatur()));
       }
       else {
         if (status >= elektroStatus::elektroEin && elektroRuecklauf.temperatur() <= 65.0) {
           durchlauferhitzer.on();
-          Log::Debug("Durchlauferhitzer ein");
+          Log::Info("Durchlauferhitzer ein");
         }
         else Log::Debug("Kuehle Durchlauferhitzer");
       }
