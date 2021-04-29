@@ -469,7 +469,7 @@ int main(int argc, const char** argv) {
         Log::Info("Schalte Boilerpumpe ein");
       }
       // Schalte Boiler Kreis aus
-      if (status >= elektroStatus::elektroStart) {
+      if (status >= elektroStatus::elektroStart && elektroRuecklauf.temperatur() < 44.0) {
         boilerpumpe.off();
         Log::Info("Schalte Boilerpumpe aus");
         boilervalve.close();
