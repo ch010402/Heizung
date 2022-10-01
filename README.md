@@ -46,14 +46,17 @@ device address | description
 ## Tasks
 
 - [x] Setup output
-- [ ] ~~Initialisierung~~
+- [ ] ~~Initialisierung~~ -> implemented in classes 
 - [x] Read DS18B20 Sensor
 - [x] Read multiple Sensors and react to them
 - [X] Long test run script -> successful 
-- [ ] Build mix valve class
+- [x] Build mix valve class -> mixer
+- [x] Long test run script -> >600d
+- [ ] ~~Change cabling~~
+- [ ] ~~Extend script to oven pump~~
+- [ ] ~~Long test run script~~
+- [ ] ~~Change cabling~~
+- [ ] Calculate heating function
+- [ ] Build heating class function ???
+- [ ] Change cabling (control heating mixer)
 - [ ] Long test run script
-- [ ] Change cabling
-- [ ] Extend script to oven pump
-- [ ] Long test run script
-- [ ] Change cabling
-- [ ] ...
