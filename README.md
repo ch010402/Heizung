@@ -22,7 +22,7 @@ nr. | shortname | BCM | wPI | O | Bezeichnung | Kommentar
 13 | er  | 23 |  **4** | 1.4 | Elektrorelais | 
 14 | sp1 | 18 |  **1** | 1.3 | Reserve | 
 15 | sp2 | 27 |  **2** | 1.2 | Reserve |
-16 | sp3 |    |  **0** | 1.1 | Reserve |
+16 | sp3 | ~~17~~ |  **0** | 1.1 | Reserve |
 
 ## Inputs
 device address | description
